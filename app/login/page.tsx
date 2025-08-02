@@ -2,6 +2,8 @@
 import { signIn } from "@/lib/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,11 +13,20 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     setError("");
+
     try {
-      await signIn(email, password);
-      router.push("/dashboard");
+      const loggedInUser = await signIn(email, password);
+      const uid = loggedInUser.user.uid;
+
+      const docSnap = await getDoc(doc(db, "barbers", uid));
+      const slug = docSnap.exists() ? docSnap.data().slug : null;
+
+      if (!slug) throw new Error("No slug found for this user.");
+
+      router.push(`/barber/${slug}/dashboard`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      setError("Login failed. Please check your credentials.");
     }
   };
 
