@@ -1,18 +1,12 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { logOut } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
   const { user, loading } = useAuth();
-
-  const handleLogout = async () => {
-    await logOut();
-    router.push("/");
-  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -26,11 +20,6 @@ export default function Page() {
   return (
     <div>
       <h5>This is the dashboard!!!</h5>
-      <button
-        onClick={handleLogout}
-        className="p-2 border border-amber-500 bg-amber-400 text-white rounded hover:bg-amber-500 transition">
-        Log Out
-      </button>
     </div>
   );
 }
