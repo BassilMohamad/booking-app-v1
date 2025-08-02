@@ -6,7 +6,7 @@ import { useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { logOut } from "@/lib/auth";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Logo } from "./icons";
 
@@ -15,14 +15,15 @@ const Navbar = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const navLinks = [{ label: t("home.main"), href: "/" }];
 
   if (user) {
     navLinks.push({ label: t("home.dashboard"), href: "/dashboard" });
   } else {
     navLinks.push(
-      { label: t("home.login"), href: "/login" },
-      { label: t("home.signup"), href: "/signup" }
+      { label: t("home.signup"), href: "/signup" },
+      { label: t("home.login"), href: "/login" }
     );
   }
 
