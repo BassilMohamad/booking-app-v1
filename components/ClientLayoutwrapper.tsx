@@ -18,9 +18,11 @@ export default function ClientLayoutWrapper({
   }, [i18n.language]);
 
   return (
-    <>
-      <Navbar />
-      <main>{children}</main>
-    </>
+    <div className="flex flex-col h-screen overflow-hidden">
+      <div className="h-[10vh] shrink-0">
+        <Navbar />
+      </div>
+      <main className="h-[90vh] overflow-auto bg-gray-100">{children}</main>
+    </div>
   );
 }

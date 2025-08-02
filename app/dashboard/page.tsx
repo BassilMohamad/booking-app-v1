@@ -18,7 +18,7 @@ export default function Page() {
 
   if (loading) return <p>Loading...</p>;
   return (
-    <div>
+    <div className="h-full">
       <h5>This is the dashboard!!!</h5>
     </div>
   );
