@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,10 @@ export default function UpdateBarberNameForm() {
   const [message, setMessage] = useState("");
   const router = useRouter();
   const slug = useBarberSlug();
+
+  const [serviceName, setServiceName] = useState("");
+  const [servicePrice, setServicePrice] = useState<number>(0);
+  const [serviceDuration, setServiceDuration] = useState<number>(0);
 
   const handleUpdate = async () => {
     if (!user) return;
@@ -35,11 +39,31 @@ export default function UpdateBarberNameForm() {
       setLoading(false);
     }
   };
+  const handleAdd = async () => {
+    const newService = {
+      id: serviceName.toLowerCase().replace(/\s+/g, "-"),
+      name: serviceName,
+      price: servicePrice,
+      duration: serviceDuration,
+    };
+
+    const barberRef = doc(db, "barbers", user!.uid);
+    await updateDoc(barberRef, {
+      servicesWithPriceAndTime: arrayUnion(newService),
+    });
+
+    setServiceName("");
+    setServicePrice(0);
+    setServiceDuration(0);
+  };
+
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login");
     }
   }, [user, authLoading, router]);
+  if (!user) return null;
+  console.log(user.uid);
   return (
     <div className="max-w-md mx-auto">
       <input
@@ -62,6 +86,27 @@ export default function UpdateBarberNameForm() {
           Your Website
         </Link>
       </h1>
+
+      <div className="space-y-2">
+        <input
+          value={serviceName}
+          onChange={(e) => setServiceName(e.target.value)}
+          placeholder="Service name"
+        />
+        <input
+          type="number"
+          value={servicePrice}
+          onChange={(e) => setServicePrice(Number(e.target.value))}
+          placeholder="Price"
+        />
+        <input
+          type="number"
+          value={serviceDuration}
+          onChange={(e) => setServiceDuration(Number(e.target.value))}
+          placeholder="Duration (min)"
+        />
+        <button onClick={handleAdd}>Add Service</button>
+      </div>
     </div>
   );
 }
