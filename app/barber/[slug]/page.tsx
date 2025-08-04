@@ -1,5 +1,5 @@
-import BarberLivePage from "@/app/barber/BarberLivePage";
+import BarberLivePage from "../BarberLivePage";
 
-export default function Page({ params }: { params: { slug: string } }) {
-  return <BarberLivePage slug={params.slug} />;
+export default function Page() {
+  return <BarberLivePage />;
 }

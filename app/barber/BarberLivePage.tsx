@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { Spinner } from "@/components/ui/Spinner";
+import { useParams } from "next/navigation";
 
 type Service = {
   id: string;
@@ -12,12 +13,14 @@ type Service = {
   duration: number;
 };
 
-export default function BarberLivePage({ slug }: { slug: string }) {
+export default function BarberLivePage() {
   const [loading, setLoading] = useState(true);
   const [barberName, setBarberName] = useState<string | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedServices, setSelectedServices] = useState<Service[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const params = useParams();
+  const slug = params?.slug as string;
 
   useEffect(() => {
     setLoading(true);
