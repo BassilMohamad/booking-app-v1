@@ -42,7 +42,7 @@ export default function LanguageSwitcher({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [menuRef, setIsOpen]);
   return (
     <div className="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse relative">
       <button
