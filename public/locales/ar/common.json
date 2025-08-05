@@ -2,11 +2,136 @@
   "home": {
     "step_one": "الخطوة الأولى",
     "bold": "أنشئ موقعك الإلكتروني",
-    "descriptionTail": "لمشاركته مع زبائنك! أضف خدماتك وأسعارك وأوقات الحجز بسهولة عبر لوحة تحكم بسيطة، وابدأ استقبال الحجوزات مباشرة.",
-    "signup": "سجل الان",
-    "login": "تسجل دخول",
+    "descriptionTail": "لمشاركته مع عملائك! أضف خدماتك، وأسعارك، وأوقات الحجز بسهولة من خلال لوحة تحكم بسيطة وابدأ باستقبال الحجوزات فوراً.",
+    "signup": "سجل الآن",
+    "login": "تسجيل الدخول",
     "dashboard": "لوحة التحكم",
     "logout": "تسجيل الخروج",
-    "main": "الصفحة الرئيسية"
+    "main": "الرئيسية"
+  },
+  "salonName": "صالون إيليت باربر",
+  "bookingSubtitle": "احجز موعدك مع حلاقينا المحترفين",
+  "steps": {
+    "selectBarber": {
+      "title": "اختر الحلاق",
+      "description": "اختر الحلاق المفضل لديك"
+    },
+    "chooseServices": {
+      "title": "اختر الخدمات",
+      "description": "حدد الخدمات التي ترغب بها"
+    },
+    "pickDateTime": {
+      "title": "اختر التاريخ والوقت",
+      "description": "حدد الوقت الذي ترغب بالحجز فيه"
+    },
+    "yourDetails": {
+      "title": "معلوماتك",
+      "description": "أدخل معلومات الاتصال الخاصة بك"
+    },
+    "confirmation": {
+      "title": "تأكيد",
+      "description": "راجع واحجز موعدك"
+    }
+  },
+  "previous": "السابق",
+  "next": "التالي",
+  "confirmBooking": "تأكيد الحجز",
+  "chooseBarber": "اختر الحلاق الخاص بك",
+  "barberSubtitle": "اختر من بين فريقنا المحترف وذو الخبرة",
+  "availableToday": "متاح اليوم",
+  "chooseServices": "اختر خدماتك",
+  "servicesSubtitle": "حدد الخدمات التي ترغب بحجزها",
+  "selectedServicesSummary": "ملخص الخدمات المختارة",
+  "total": "الإجمالي",
+  "minutes": "دقيقة",
+  "chooseDateAndTime": "اختر التاريخ والوقت",
+  "dateTimeSubtitle": "اختر الوقت المناسب للحجز مع",
+  "appointmentDetails": "تفاصيل الموعد",
+  "barber": "الحلاق:",
+  "servicesLabel": "الخدمات:",
+  "selected": "المختارة",
+  "totalDuration": "المدة الإجمالية:",
+  "workingHours": "ساعات العمل:",
+  "selectDate": "اختر التاريخ",
+  "availableTimes": "الأوقات المتاحة",
+  "selectDateFirst": "يرجى اختيار التاريخ أولاً",
+  "booked": "(محجوز)",
+  "selectedDate": "التاريخ المختار:",
+  "selectedTime": "الوقت المختار:",
+  "contactInformation": "معلومات الاتصال الخاصة بك",
+  "contactSubtitle": "سنستخدم هذه المعلومات لتأكيد موعدك وإرسال التذكيرات",
+  "contactDetails": "تفاصيل الاتصال",
+  "fullName": "الاسم الكامل",
+  "enterFullName": "أدخل اسمك الكامل",
+  "phoneNumber": "رقم الهاتف",
+  "enterPhoneNumber": "أدخل رقم هاتفك",
+  "smsConfirmation": "سوف نرسل لك رسالة تأكيد وتذكير عبر SMS",
+  "privacyNotice": "إشعار الخصوصية",
+  "privacyText": "سيتم استخدام معلوماتك الشخصية فقط لغرض الحجز والتواصل. لن نشارك بياناتك مع أي طرف ثالث ويمكنك طلب حذف بياناتك في أي وقت.",
+  "nameRequired": "الاسم مطلوب",
+  "nameMinLength": "يجب أن يكون الاسم على الأقل حرفين",
+  "phoneRequired": "رقم الهاتف مطلوب",
+  "phoneInvalid": "يرجى إدخال رقم هاتف صالح",
+  "confirmYourBooking": "أكد حجزك",
+  "confirmSubtitle": "يرجى مراجعة تفاصيل موعدك قبل التأكيد",
+  "appointmentSummary": "ملخص الموعد",
+  "selectedServices": "الخدمات المختارة",
+  "yourInformation": "معلوماتك",
+  "name": "الاسم:",
+  "phone": "الهاتف:",
+  "importantNotes": "ملاحظات مهمة",
+  "notes": {
+    "arrive": "• يرجى الوصول قبل 5 دقائق من موعدك",
+    "cancellation": "• يجب إلغاء الموعد قبل ساعتين على الأقل",
+    "reminder": "• سنرسل لك تذكيراً عبر SMS قبل ساعة من موعدك",
+    "payment": "• يمكن الدفع نقداً أو بالبطاقة في الصالون"
+  },
+  "serviceDefinitions": {
+    "classicHaircut": {
+      "name": "قصة شعر كلاسيكية",
+      "description": "قصة تقليدية باستخدام المقص والماكينة"
+    },
+    "modernFade": {
+      "name": "قصّة تدرج عصري",
+      "description": "تدرج عصري مع تصفيف وإنهاء"
+    },
+    "beardTrim": {
+      "name": "تهذيب اللحية",
+      "description": "تشكيل وتهذيب احترافي للحية"
+    },
+    "hotTowelShave": {
+      "name": "حلاقة بالمنشفة الساخنة",
+      "description": "حلاقة تقليدية باستخدام الموس مع منشفة ساخنة"
+    },
+    "hairWashStyle": {
+      "name": "غسل وتصفيف الشعر",
+      "description": "غسل احترافي مع تصفيف وتطبيق منتج"
+    },
+    "mustacheTrim": {
+      "name": "تهذيب الشارب",
+      "description": "تهذيب وتشكيل دقيق للشارب"
+    },
+    "hairColor": {
+      "name": "صبغ الشعر",
+      "description": "خدمة صبغ احترافية للشعر"
+    },
+    "eyebrowTrim": {
+      "name": "تهذيب الحواجب",
+      "description": "تشكيل وتهذيب الحواجب"
+    }
+  },
+  "barberDefinitions": {
+    "marcus": {
+      "specialty": "قصات كلاسيكية وتهذيب اللحى"
+    },
+    "david": {
+      "specialty": "تدرجات عصرية وتصميمات شعر"
+    },
+    "alex": {
+      "specialty": "حلاقة تقليدية باستخدام الموس"
+    },
+    "jake": {
+      "specialty": "تصفيف إبداعي وصبغات شعر"
+    }
   }
 }

@@ -8,5 +8,130 @@
     "dashboard": "Dashboard",
     "logout": "Logout",
     "main": "Home"
+  },
+  "salonName": "Elite Barber Salon",
+  "bookingSubtitle": "Book your appointment with our professional barbers",
+  "steps": {
+    "selectBarber": {
+      "title": "Select Barber",
+      "description": "Choose your preferred barber"
+    },
+    "chooseServices": {
+      "title": "Choose Services",
+      "description": "Select services you want"
+    },
+    "pickDateTime": {
+      "title": "Pick Date & Time",
+      "description": "Choose when you want to book"
+    },
+    "yourDetails": {
+      "title": "Your Details",
+      "description": "Enter your contact information"
+    },
+    "confirmation": {
+      "title": "Confirmation",
+      "description": "Review and confirm your booking"
+    }
+  },
+  "previous": "Previous",
+  "next": "Next",
+  "confirmBooking": "Confirm Booking",
+  "chooseBarber": "Choose Your Barber",
+  "barberSubtitle": "Select from our experienced team of professionals",
+  "availableToday": "Available Today",
+  "chooseServices": "Choose Your Services",
+  "servicesSubtitle": "Select the services you would like to book",
+  "selectedServicesSummary": "Selected Services Summary",
+  "total": "Total",
+  "minutes": "min",
+  "chooseDateAndTime": "Choose Date & Time",
+  "dateTimeSubtitle": "Select your preferred appointment time with",
+  "appointmentDetails": "Appointment Details",
+  "barber": "Barber:",
+  "servicesLabel": "Services:",
+  "selected": "selected",
+  "totalDuration": "Total Duration:",
+  "workingHours": "Working Hours:",
+  "selectDate": "Select Date",
+  "availableTimes": "Available Times",
+  "selectDateFirst": "Please select a date first",
+  "booked": "(Booked)",
+  "selectedDate": "Selected Date:",
+  "selectedTime": "Selected Time:",
+  "contactInformation": "Your Contact Information",
+  "contactSubtitle": "We'll use this information to confirm your appointment and send reminders",
+  "contactDetails": "Contact Details",
+  "fullName": "Full Name",
+  "enterFullName": "Enter your full name",
+  "phoneNumber": "Phone Number",
+  "enterPhoneNumber": "Enter your phone number",
+  "smsConfirmation": "We'll send you an SMS confirmation and reminder",
+  "privacyNotice": "Privacy Notice",
+  "privacyText": "Your personal information will only be used for appointment booking and communication purposes. We won't share your details with third parties and you can request deletion of your data at any time.",
+  "nameRequired": "Name is required",
+  "nameMinLength": "Name must be at least 2 characters",
+  "phoneRequired": "Phone number is required",
+  "phoneInvalid": "Please enter a valid phone number",
+  "confirmYourBooking": "Confirm Your Booking",
+  "confirmSubtitle": "Please review your appointment details before confirming",
+  "appointmentSummary": "Appointment Summary",
+  "selectedServices": "Selected Services",
+  "yourInformation": "Your Information",
+  "name": "Name:",
+  "phone": "Phone:",
+  "importantNotes": "Important Notes",
+  "notes": {
+    "arrive": "• Please arrive 5 minutes before your appointment time",
+    "cancellation": "• Cancellations must be made at least 2 hours in advance",
+    "reminder": "• We'll send you an SMS reminder 1 hour before your appointment",
+    "payment": "• Payment can be made by cash or card at the salon"
+  },
+  "serviceDefinitions": {
+    "classicHaircut": {
+      "name": "Classic Haircut",
+      "description": "Traditional cut with scissors and clipper work"
+    },
+    "modernFade": {
+      "name": "Modern Fade",
+      "description": "Contemporary fade with styling and finish"
+    },
+    "beardTrim": {
+      "name": "Beard Trim",
+      "description": "Professional beard shaping and trimming"
+    },
+    "hotTowelShave": {
+      "name": "Hot Towel Shave",
+      "description": "Traditional straight razor shave with hot towel treatment"
+    },
+    "hairWashStyle": {
+      "name": "Hair Wash & Style",
+      "description": "Professional wash with styling and product application"
+    },
+    "mustacheTrim": {
+      "name": "Mustache Trim",
+      "description": "Precision mustache trimming and shaping"
+    },
+    "hairColor": {
+      "name": "Hair Color",
+      "description": "Professional hair coloring service"
+    },
+    "eyebrowTrim": {
+      "name": "Eyebrow Trim",
+      "description": "Eyebrow shaping and trimming"
+    }
+  },
+  "barberDefinitions": {
+    "marcus": {
+      "specialty": "Classic Cuts & Beard Styling"
+    },
+    "david": {
+      "specialty": "Modern Fades & Hair Design"
+    },
+    "alex": {
+      "specialty": "Straight Razor & Traditional Shaves"
+    },
+    "jake": {
+      "specialty": "Creative Styling & Color"
+    }
   }
 }

@@ -1,5 +1,5 @@
-import BarberLivePage from "../BarberLivePage";
+import { BookingWizard } from "./clientSelectBooking/BookingWizard";
 
 export default function Page() {
-  return <BarberLivePage />;
+  return <BookingWizard />;
 }
