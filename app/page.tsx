@@ -1,6 +1,6 @@
 "use client";
-import { Scissors } from "@/components/icons/index";
-import { Button } from "@/components/ui/button";
+import { Scissors } from "@/app/components/icons/index";
+import { Button } from "@/app/components/ui/button";
 
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";

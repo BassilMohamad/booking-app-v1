@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { dir } from "i18next";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/components/Navbar";
 
 export default function ClientLayoutWrapper({
   children,

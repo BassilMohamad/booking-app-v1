@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+import { Card, CardContent } from "@/app/components/ui/card";
+import { Badge } from "@/app/components/ui/badge";
+import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
 export interface Barber {
   id: string;

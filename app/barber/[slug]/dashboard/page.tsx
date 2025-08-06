@@ -63,7 +63,7 @@ export default function UpdateBarberNameForm() {
     }
   }, [user, authLoading, router]);
   if (!user) return null;
-  console.log(user.uid);
+
   return (
     <div className="max-w-md mx-auto">
       <input

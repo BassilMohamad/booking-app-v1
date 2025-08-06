@@ -2,8 +2,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button";
 
 import { BarberSelection } from "./BarberSelection";
 import { ServiceSelection } from "./ServiceSelection";

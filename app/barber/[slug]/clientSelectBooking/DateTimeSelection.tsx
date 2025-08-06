@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Calendar } from "@/app/components/ui/calendar";
+import { Button } from "@/app/components/ui/button";
+import { Badge } from "@/app/components/ui/badge";
 import { Clock, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type Barber, type Service } from "./BookingWizard";

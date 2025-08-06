@@ -1,6 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { Badge } from "@/app/components/ui/badge";
 import { Clock, DollarSign } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
