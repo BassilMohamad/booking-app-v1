@@ -15,6 +15,8 @@ import { ServiceSelection } from "./ServiceSelection";
 import { DateTimeSelection } from "./DateTimeSelection";
 import { ContactForm } from "./ContactForm";
 import { BookingConfirmation } from "./BookingConfirmation";
+import { useAddBooking } from "@/app/api/useAddBooking";
+import { useParams } from "next/navigation";
 
 export interface Barber {
   id: string;
@@ -51,6 +53,9 @@ export function BookingWizard() {
   const [bookingData, setBookingData] = useState<BookingData>({
     services: [],
   });
+  const params = useParams();
+  const shopSlug = params.slug as string;
+  const { mutate } = useAddBooking();
 
   const steps = [
     {
@@ -155,6 +160,20 @@ export function BookingWizard() {
     }
   };
 
+  const handleAAddBokkingHandler = () => {
+    mutate({
+      shopSlug: shopSlug,
+      booking: {
+        barberId: bookingData.barber?.id as string,
+        customerName: bookingData.customerName as string,
+        service: bookingData.services.map((s) => s.id),
+        date: bookingData.date as string,
+        time: bookingData.time as string,
+        customerPhoneNumber: bookingData.customerPhone as string,
+      },
+    });
+  };
+
   return (
     <div className="w-[85%] mx-auto p-4 space-y-6">
       {/* Progress Steps */}
@@ -215,7 +234,11 @@ export function BookingWizard() {
             {t("next")}
           </Button>
         ) : (
-          <Button onClick={() => alert(t("confirmBooking") + "!")}>
+          <Button
+            onClick={() => {
+              alert(t("confirmBooking") + "!");
+              handleAAddBokkingHandler();
+            }}>
             {t("confirmBooking")}
           </Button>
         )}

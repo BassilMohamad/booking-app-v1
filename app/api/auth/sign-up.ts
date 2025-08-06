@@ -47,6 +47,7 @@ export const useSignUpWithOwner = () => {
         barbers: [],
         createdAt: Date.now(),
         email,
+        bookings: [],
       });
 
       return { uid: user.uid, shopId: slug };

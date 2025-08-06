@@ -27,9 +27,9 @@ export default function UpdateBarberNameForm() {
     setMessage("");
 
     try {
-      const barberRef = doc(db, "barbers", user.uid);
+      const barberRef = doc(db, "shops", user.uid);
       await updateDoc(barberRef, {
-        barberName: barberName,
+        name: barberName,
       });
       setMessage("Barber name updated successfully.");
     } catch (error) {
@@ -47,7 +47,7 @@ export default function UpdateBarberNameForm() {
       duration: serviceDuration,
     };
 
-    const barberRef = doc(db, "shopd", user!.uid);
+    const barberRef = doc(db, "shops", user!.uid);
     await updateDoc(barberRef, {
       servicesWithPriceAndTime: arrayUnion(newService),
     });
