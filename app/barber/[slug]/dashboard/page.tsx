@@ -47,7 +47,7 @@ export default function UpdateBarberNameForm() {
       duration: serviceDuration,
     };
 
-    const barberRef = doc(db, "barbers", user!.uid);
+    const barberRef = doc(db, "shopd", user!.uid);
     await updateDoc(barberRef, {
       servicesWithPriceAndTime: arrayUnion(newService),
     });

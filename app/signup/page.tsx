@@ -1,24 +1,33 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUpWithBarber } from "@/lib/auth";
+import { signUpWithOwner } from "@/lib/auth";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [barberName, setBarberName] = useState("");
+  const [shopName, setShopName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async () => {
+    if (!shopName.trim()) {
+      setError("Please enter a shop name.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
+
     try {
-      await signUpWithBarber(email, password, barberName);
-      router.push("/dashboard");
+      await signUpWithOwner(email, password, shopName);
+      const slug = shopName.trim().toLowerCase().replace(/\s+/g, "-");
+
+      router.push(`/barber/${slug}/dashboard`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      setError("Sign-up failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -30,9 +39,9 @@ export default function SignUpPage() {
         <h1 className="text-2xl font-bold mb-4 text-center">Sign Up</h1>
         <input
           className="w-full border p-2 mb-3 rounded"
-          placeholder="Barber Name"
-          value={barberName}
-          onChange={(e) => setBarberName(e.target.value)}
+          placeholder="Shop Name"
+          value={shopName}
+          onChange={(e) => setShopName(e.target.value)}
         />
         <input
           className="w-full border p-2 mb-3 rounded"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "./useAuth";
 
@@ -10,15 +10,22 @@ export function useBarberSlug() {
   useEffect(() => {
     const fetchSlug = async () => {
       if (user) {
-        const barberRef = doc(db, "barbers", user.uid);
-        const barberSnap = await getDoc(barberRef);
-        if (barberSnap.exists()) {
-          const data = barberSnap.data();
-          setSlug(data.slug);
+        try {
+          const shopsRef = collection(db, "shops");
+          const q = query(shopsRef, where("ownerId", "==", user.uid));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const shopData = querySnapshot.docs[0].data(); // First shop
+            setSlug(shopData.slug);
+          } else {
+            console.warn("No shop found for this user.");
+          }
+        } catch (error) {
+          console.error("Error fetching slug:", error);
         }
       }
     };
-
     fetchSlug();
   }, [user]);
 

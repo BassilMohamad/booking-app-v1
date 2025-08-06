@@ -1,28 +1,47 @@
-import { db, auth } from "./firebase";
+import { auth, db } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
-// Sign up
-export const signUpWithBarber = async (
+export const signUpWithOwner = async (
   email: string,
   password: string,
-  barberName: string
+  shopName: string
 ) => {
+  if (!shopName || !email || !password) {
+    throw new Error("All fields are required.");
+  }
+
+  const slug = shopName.trim().toLowerCase().replace(/\s+/g, "-");
+
+  // ✅ Check if shop with same slug exists
+  const shopRef = doc(db, "shops", slug);
+  const shopSnap = await getDoc(shopRef);
+  if (shopSnap.exists()) {
+    throw new Error("A shop with this name already exists.");
+  }
+
+  // ✅ Create owner account
   const res = await createUserWithEmailAndPassword(auth, email, password);
   const user = res.user;
-  const slug = barberName.trim().toLowerCase().replace(/\s+/g, "-");
 
-  await setDoc(doc(db, "barbers", user.uid), {
-    uid: user.uid,
-    email: user.email,
-    barberName,
-    slug,
+  // ✅ Create shop document
+  await setDoc(shopRef, {
+    name: shopName,
+    slug: slug,
+    ownerId: user.uid,
+    address: "",
+    openingHours: { start: "", end: "" },
+    services: [],
+    barbers: [],
     createdAt: Date.now(),
+    email,
   });
+
+  return { uid: user.uid, shopId: slug };
 };
 
 // Sign in
