@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUpWithOwner } from "@/lib/auth";
+import { useSignUpWithOwner } from "@/app/api/auth/sign-up";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +10,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { mutate } = useSignUpWithOwner();
 
   const handleSignUp = async () => {
     if (!shopName.trim()) {
@@ -20,17 +21,19 @@ export default function SignUpPage() {
     setLoading(true);
     setError(null);
 
-    try {
-      await signUpWithOwner(email, password, shopName);
-      const slug = shopName.trim().toLowerCase().replace(/\s+/g, "-");
-
-      router.push(`/barber/${slug}/dashboard`);
-    } catch (err) {
-      console.error(err);
-      setError("Sign-up failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    const slug = shopName.trim().toLowerCase().replace(/\s+/g, "-");
+    mutate(
+      { email, password, shopName },
+      {
+        onSuccess: () => {
+          router.push(`/barber/${slug}/dashboard`);
+        },
+        onError: (err) => {
+          console.error(err);
+          setError(err.message || "Sign-up failed. Please try again.");
+        },
+      }
+    );
   };
 
   return (

@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuth } from "@/hooks/useAuth";
-import { logOut } from "@/lib/auth";
+
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Logo } from "./icons";
 import { useBarberSlug } from "@/hooks/useBarberSlug";
+import { useSignOut } from "@/app/api/auth/sign-out";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ const Navbar = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const navLinks = [{ label: t("home.main"), href: "/" }];
   const slug = useBarberSlug();
+  const { mutate: signOut } = useSignOut();
 
   if (user) {
     navLinks.push({
@@ -34,7 +36,7 @@ const Navbar = () => {
   }
 
   const handleLogout = async () => {
-    await logOut();
+    await signOut();
     router.push("/");
   };
 
