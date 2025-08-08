@@ -11,6 +11,7 @@
   },
   "salonName": "Elite Barber Salon",
   "bookingSubtitle": "Book your appointment with our professional barbers",
+  "doneBooking": "Your booking was successful! 🎉",
   "steps": {
     "selectBarber": {
       "title": "Select Barber",

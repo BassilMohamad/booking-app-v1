@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { dir } from "i18next";
 import Navbar from "@/app/components/Navbar";
+import { Toaster } from "sonner";
 
 export default function ClientLayoutWrapper({
   children,
@@ -23,6 +24,7 @@ export default function ClientLayoutWrapper({
         <Navbar />
       </div>
       <main className="h-[90vh] overflow-auto bg-gray-100">{children}</main>
+      <Toaster richColors position="top-center" expand={false} />
     </div>
   );
 }

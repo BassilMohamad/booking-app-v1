@@ -17,6 +17,8 @@ import { ContactForm } from "./ContactForm";
 import { BookingConfirmation } from "./BookingConfirmation";
 import { useAddBooking } from "@/app/api/useAddBooking";
 import { useParams } from "next/navigation";
+import { useShopBySlug } from "@/hooks/useShopBySlug";
+import { toast } from "sonner";
 
 export interface Barber {
   id: string;
@@ -56,6 +58,9 @@ export function BookingWizard() {
   const params = useParams();
   const shopSlug = params.slug as string;
   const { mutate } = useAddBooking();
+
+  const { data, isLoading } = useShopBySlug(shopSlug);
+  if (!data) return null;
 
   const steps = [
     {
@@ -123,6 +128,7 @@ export function BookingWizard() {
           <BarberSelection
             selectedBarber={bookingData.barber}
             onBarberSelect={(barber) => updateBookingData({ barber })}
+            barbers={data.barbers}
           />
         );
       case 2:
@@ -130,6 +136,7 @@ export function BookingWizard() {
           <ServiceSelection
             selectedServices={bookingData.services}
             onServicesChange={(services) => updateBookingData({ services })}
+            services={data.services}
           />
         );
       case 3:
@@ -141,6 +148,7 @@ export function BookingWizard() {
             selectedTime={bookingData.time}
             onDateSelect={(date) => updateBookingData({ date })}
             onTimeSelect={(time) => updateBookingData({ time })}
+            shopSlug={shopSlug}
           />
         );
       case 4:
@@ -161,17 +169,36 @@ export function BookingWizard() {
   };
 
   const handleAAddBokkingHandler = () => {
-    mutate({
-      shopSlug: shopSlug,
-      booking: {
-        barberId: bookingData.barber?.id as string,
-        customerName: bookingData.customerName as string,
-        service: bookingData.services.map((s) => s.id),
-        date: bookingData.date as string,
-        time: bookingData.time as string,
-        customerPhoneNumber: bookingData.customerPhone as string,
+    mutate(
+      {
+        shopSlug: shopSlug,
+        booking: {
+          barberId: bookingData.barber?.id as string,
+          customerName: bookingData.customerName as string,
+          service: bookingData.services.map((s) => s.id),
+          date: bookingData.date as string,
+          time: bookingData.time as string,
+          customerPhoneNumber: bookingData.customerPhone,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          setCurrentStep(1);
+          toast.success(t("doneBooking"));
+          setBookingData({
+            barber: undefined,
+            services: [],
+            date: undefined,
+            time: undefined,
+            customerName: undefined,
+            customerPhone: undefined,
+          });
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
   };
 
   return (
@@ -236,7 +263,6 @@ export function BookingWizard() {
         ) : (
           <Button
             onClick={() => {
-              alert(t("confirmBooking") + "!");
               handleAAddBokkingHandler();
             }}>
             {t("confirmBooking")}

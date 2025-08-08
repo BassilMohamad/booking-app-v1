@@ -6,12 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
-import { Calendar } from "@/app/components/ui/calendar";
+// import { Calendar } from "@/app/components/ui/calendar";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Clock, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type Barber, type Service } from "./BookingWizard";
+import { useBookedSlots } from "@/app/api/useBookedSlots";
+import { Calendar } from "@/components/ui/calendar";
 
 interface DateTimeSelectionProps {
   barber: Barber;
@@ -20,6 +22,7 @@ interface DateTimeSelectionProps {
   selectedTime?: string;
   onDateSelect: (date: string) => void;
   onTimeSelect: (time: string) => void;
+  shopSlug: string;
 }
 
 export function DateTimeSelection({
@@ -29,8 +32,14 @@ export function DateTimeSelection({
   selectedTime,
   onDateSelect,
   onTimeSelect,
+  shopSlug,
 }: DateTimeSelectionProps) {
   const { t } = useTranslation();
+  const { data: bookedSlots = [] } = useBookedSlots(
+    shopSlug,
+    barber.id,
+    selectedDate
+  );
 
   const [calendarDate, setCalendarDate] = useState<Date | undefined>(
     selectedDate ? new Date(selectedDate) : new Date()
@@ -58,7 +67,7 @@ export function DateTimeSelection({
         .toString()
         .padStart(2, "0")}`;
 
-      const isBooked = barber.bookedSlots.some((bookedSlot) => {
+      const isBooked = bookedSlots.some((bookedSlot) => {
         const [bookedHour, bookedMinute] = bookedSlot.split(":").map(Number);
         const bookedTime = bookedHour * 60 + bookedMinute;
 
@@ -82,7 +91,10 @@ export function DateTimeSelection({
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       setCalendarDate(date);
-      onDateSelect(date.toISOString().split("T")[0]);
+      const y = date.getFullYear();
+      const m = (date.getMonth() + 1).toString().padStart(2, "0");
+      const d = date.getDate().toString().padStart(2, "0");
+      onDateSelect(`${y}-${m}-${d}`);
     }
   };
 
@@ -153,7 +165,7 @@ export function DateTimeSelection({
               selected={calendarDate}
               onSelect={handleDateSelect}
               disabled={(date) => date < new Date() || date.getDay() === 0}
-              className="rounded-md border"
+              // className="rounded-md border"
             />
             {selectedDate && (
               <div className="mt-4 p-3 bg-accent/50 rounded-md">

@@ -14,58 +14,15 @@ import { type Service } from "./BookingWizard";
 interface ServiceSelectionProps {
   selectedServices: Service[];
   onServicesChange: (services: Service[]) => void;
+  services: Service[];
 }
 
 export function ServiceSelection({
   selectedServices,
   onServicesChange,
+  services,
 }: ServiceSelectionProps) {
   const { t } = useTranslation();
-
-  const mockServices: Service[] = [
-    {
-      id: "1",
-      name: t("serviceDefinitions.classicHaircut.name"),
-      duration: 30,
-      price: 35,
-      description: t("serviceDefinitions.classicHaircut.description"),
-    },
-    {
-      id: "2",
-      name: t("serviceDefinitions.modernFade.name"),
-      duration: 45,
-      price: 45,
-      description: t("serviceDefinitions.modernFade.description"),
-    },
-    {
-      id: "3",
-      name: t("serviceDefinitions.beardTrim.name"),
-      duration: 20,
-      price: 20,
-      description: t("serviceDefinitions.beardTrim.description"),
-    },
-    {
-      id: "4",
-      name: t("serviceDefinitions.hotTowelShave.name"),
-      duration: 40,
-      price: 40,
-      description: t("serviceDefinitions.hotTowelShave.description"),
-    },
-    {
-      id: "5",
-      name: t("serviceDefinitions.hairWashStyle.name"),
-      duration: 25,
-      price: 25,
-      description: t("serviceDefinitions.hairWashStyle.description"),
-    },
-    {
-      id: "6",
-      name: t("serviceDefinitions.mustacheTrim.name"),
-      duration: 15,
-      price: 15,
-      description: t("serviceDefinitions.mustacheTrim.description"),
-    },
-  ];
 
   const handleServiceToggle = (service: Service) => {
     const isSelected = selectedServices.some((s) => s.id === service.id);
@@ -137,7 +94,7 @@ export function ServiceSelection({
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {mockServices.map((service) => {
+        {services.map((service) => {
           const isSelected = selectedServices.some((s) => s.id === service.id);
 
           return (

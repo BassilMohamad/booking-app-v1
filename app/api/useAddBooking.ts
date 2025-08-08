@@ -9,7 +9,7 @@ interface Booking {
   service: string[];
   date: string;
   time: string;
-  customerPhoneNumber: string;
+  customerPhoneNumber?: string;
 }
 
 interface AddBookingArgs {
