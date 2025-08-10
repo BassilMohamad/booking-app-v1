@@ -95,7 +95,7 @@ export function DateTimeSelection({
 
     const slots = [];
 
-    while (currentTime + totalDuration <= endTime) {
+    while (currentTime < endTime) {
       if (isToday && currentTime < currentMinutes) {
         currentTime += 30;
         continue;
@@ -107,15 +107,8 @@ export function DateTimeSelection({
         .toString()
         .padStart(2, "0")}`;
 
-      const isBooked = bookedSlots.some((bookedSlot) => {
-        const [bookedHour, bookedMinute] = bookedSlot.split(":").map(Number);
-        const bookedTime = bookedHour * 60 + bookedMinute;
-
-        return (
-          (currentTime >= bookedTime && currentTime < bookedTime + 30) ||
-          (currentTime + totalDuration > bookedTime && currentTime < bookedTime)
-        );
-      });
+      // Just check if the time is booked (ignore totalDuration)
+      const isBooked = bookedSlots.includes(timeString);
 
       slots.push({
         time: timeString,
