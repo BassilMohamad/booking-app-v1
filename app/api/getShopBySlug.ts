@@ -19,7 +19,7 @@ export interface Barber {
   id: string;
   name: string;
   specialty: string;
-  image: string;
+  photo: string;
   workingHours: {
     mon: WorkingDay;
     tue: WorkingDay;

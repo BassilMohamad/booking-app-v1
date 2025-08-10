@@ -81,19 +81,18 @@ interface Service {
 }
 
 interface Booking {
-  id: string;
-  barberId: string;
   customerName: string;
-  customerPhone: string;
-  service: string;
-  date: Date;
+  customerPhoneNumber?: string;
+  barberId: string;
+  service: string[];
+  date: string;
   time: string;
-  status: "confirmed" | "pending" | "completed" | "cancelled";
 }
 type BarberForm = Partial<BarberNewData>;
 
 export default function OwnerDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const params = useParams();
   const shopSlug = params.slug as string;
@@ -111,31 +110,9 @@ export default function OwnerDashboard() {
 
   const [barbers, setBarbers] = useState<BarberNewData[]>([]);
 
-  const [services, setServices] = useState<Service[]>([
-    // {
-    //   id: "haircut",
-    //   name: "Haircut",
-    //   duration: 30,
-    //   price: 25,
-    //   description: "Classic haircut and styling",
-    // },
-    // {
-    //   id: "beard-trim",
-    //   name: "Beard Trim",
-    //   duration: 15,
-    //   price: 15,
-    //   description: "Professional beard trimming",
-    // },
-    // {
-    //   id: "hair-wash",
-    //   name: "Hair Wash",
-    //   duration: 20,
-    //   price: 10,
-    //   description: "Shampoo and conditioning",
-    // },
-  ]);
+  const [services, setServices] = useState<Service[]>([]);
 
-  const [bookings] = useState<Booking[]>([]);
+  const [bookings, setbookings] = useState<Booking[]>([]);
 
   const [selectedBarber, setSelectedBarber] = useState<string>("all");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -332,19 +309,28 @@ export default function OwnerDashboard() {
   };
 
   const filteredBookings = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.date); // Convert string/timestamp to Date
     const barberMatch =
       selectedBarber === "all" || booking.barberId === selectedBarber;
     const dateMatch =
       !selectedDate ||
-      format(booking.date, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
+      format(bookingDate, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
     return barberMatch && dateMatch;
   });
-
+  //mabe you should remove it ....
   useEffect(() => {
     setBarbers(data?.barbers || []);
     setServices(data?.services || []);
+    setbookings(data?.bookings || []);
     refetch();
   }, [data, refetch]);
+  useEffect(() => {
+    if (data) {
+      setBarbers(data.barbers || []);
+      setServices(data.services || []);
+      setbookings(data.bookings || []);
+    }
+  }, [data]);
 
   const days = [
     "monday",
@@ -449,29 +435,69 @@ export default function OwnerDashboard() {
                     />
                     {currentBarber?.workingHours?.[day]?.available && (
                       <>
+                        {/* Start time (AM only) */}
                         <Input
                           type="time"
                           className="w-30"
                           value={
                             currentBarber?.workingHours?.[day]?.start || "09:00"
                           }
+                          min="00:00"
+                          max="11:59"
                           onChange={(e) => {
-                            setCurrentBarber({
-                              ...currentBarber,
-                            });
+                            const newValue = e.target.value;
+                            // Prevent PM entry if typed manually
+                            if (newValue >= "12:00") return;
+
+                            setCurrentBarber((prev) => ({
+                              ...prev,
+                              workingHours: {
+                                ...prev?.workingHours,
+                                [day]: {
+                                  ...prev?.workingHours?.[day],
+                                  start: newValue,
+                                  available:
+                                    prev?.workingHours?.[day]?.available ??
+                                    true,
+                                  end:
+                                    prev?.workingHours?.[day]?.end || "17:00",
+                                },
+                              },
+                            }));
                           }}
                         />
+
                         <span>to</span>
+
+                        {/* End time (PM only) */}
                         <Input
                           type="time"
                           className="w-30"
                           value={
                             currentBarber?.workingHours?.[day]?.end || "17:00"
                           }
+                          min="12:00"
+                          max="23:59"
                           onChange={(e) => {
-                            setCurrentBarber({
-                              ...currentBarber,
-                            });
+                            const newValue = e.target.value;
+                            // Prevent AM entry if typed manually
+                            if (newValue < "12:00") return;
+
+                            setCurrentBarber((prev) => ({
+                              ...prev,
+                              workingHours: {
+                                ...prev?.workingHours,
+                                [day]: {
+                                  ...prev?.workingHours?.[day],
+                                  end: newValue,
+                                  available:
+                                    prev?.workingHours?.[day]?.available ??
+                                    true,
+                                  start:
+                                    prev?.workingHours?.[day]?.start || "09:00",
+                                },
+                              },
+                            }));
                           }}
                         />
                       </>
@@ -621,16 +647,6 @@ export default function OwnerDashboard() {
                   </Avatar>
                   <div>
                     <h4>{barber.name}</h4>
-                    {/* <p className="text-sm text-muted-foreground">
-                      {barber.email}
-                    </p> */}
-                    {/* <div className="flex gap-1 mt-2">
-                      {barber.services.map((service) => (
-                        <Badge key={service} variant="secondary">
-                          {service}
-                        </Badge>
-                      ))}
-                    </div> */}
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -745,44 +761,59 @@ export default function OwnerDashboard() {
             </Popover>
           </div>
         </CardHeader>
-        <CardContent>
-          <Table>
+        <CardContent dir={locale === "ar" ? "rtl" : "ltr"}>
+          <Table className={locale === "ar" ? "text-right" : "text-left"}>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("table.customer")}</TableHead>
-                <TableHead>{t("table.barber")}</TableHead>
-                <TableHead>{t("table.service")}</TableHead>
-                <TableHead>{t("table.datetime")}</TableHead>
-                <TableHead>{t("table.status")}</TableHead>
+                <TableHead
+                  className={locale === "ar" ? "text-right" : "text-left"}>
+                  {t("table.customer")}
+                </TableHead>
+                <TableHead
+                  className={locale === "ar" ? "text-right" : "text-left"}>
+                  {t("table.barber")}
+                </TableHead>
+                <TableHead
+                  className={locale === "ar" ? "text-right" : "text-left"}>
+                  {t("table.service")}
+                </TableHead>
+                <TableHead
+                  className={locale === "ar" ? "text-right" : "text-left"}>
+                  {t("table.datetime")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredBookings.map((booking) => {
                 const barber = barbers.find((b) => b.id === booking.barberId);
                 return (
-                  <TableRow key={booking.id}>
-                    <TableCell>
-                      <div>
+                  <TableRow key={`${booking.barberId}-${booking.date}`}>
+                    <TableCell
+                      className={locale === "ar" ? "text-right" : "text-left"}>
+                      <div className="flex flex-col">
                         <div>{booking.customerName}</div>
                         <div className="text-sm text-muted-foreground">
-                          {booking.customerPhone}
+                          {booking.customerPhoneNumber}
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>{barber?.name}</TableCell>
-                    <TableCell>{booking.service}</TableCell>
-                    <TableCell>
-                      {format(booking.date, "MMM dd, yyyy")} at {booking.time}
+                    <TableCell
+                      className={locale === "ar" ? "text-right" : "text-left"}>
+                      {barber?.name}
                     </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          booking.status === "confirmed"
-                            ? "default"
-                            : "secondary"
-                        }>
-                        {t(`status.${booking.status}`)}
-                      </Badge>
+                    <TableCell
+                      className={locale === "ar" ? "text-right" : "text-left"}>
+                      {booking.service
+                        .map(
+                          (serviceId) =>
+                            data?.services.find((s) => s.id === serviceId)?.name
+                        )
+                        .filter(Boolean)
+                        .join(", ")}
+                    </TableCell>
+                    <TableCell
+                      className={locale === "ar" ? "text-right" : "text-left"}>
+                      {booking.date} {t("at")} {booking.time}
                     </TableCell>
                   </TableRow>
                 );

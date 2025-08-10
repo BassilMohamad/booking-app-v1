@@ -2,6 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/app/components/ui/avatar";
 
 export interface WorkingDay {
   available: boolean;
@@ -13,7 +18,7 @@ export interface Barber {
   id: string;
   name: string;
   specialty: string;
-  image: string;
+  photo: string;
   workingHours: {
     mon: WorkingDay;
     tue: WorkingDay;
@@ -43,8 +48,10 @@ export function BarberSelection({
 
   const today = new Date();
   const dayName = today
-    .toLocaleDateString("en-US", { weekday: "short" })
+    .toLocaleDateString("en-US", { weekday: "long" })
     .toLowerCase() as Day;
+
+  console.log(barbers);
 
   return (
     <div className="space-y-4">
@@ -66,11 +73,17 @@ export function BarberSelection({
             <CardContent className="p-4">
               <div className="flex items-start space-x-4">
                 <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                  <ImageWithFallback
-                    src={barber.image}
-                    alt={barber.name}
-                    className="w-full h-full object-cover"
-                  />
+                  <Avatar className="w-16 h-16 flex-shrink-0">
+                    {barber.photo ? (
+                      <AvatarImage src={barber.photo} alt={barber.name} />
+                    ) : (
+                      <AvatarFallback>
+                        {barber.name
+                          ? barber.name.slice(0, 2).toUpperCase()
+                          : "BB"}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="truncate">{barber.name}</h3>
@@ -79,10 +92,10 @@ export function BarberSelection({
                   </p>
                   <div className="flex flex-wrap gap-1">
                     <Badge variant="secondary" className="text-xs">
-                      {/* {barber.workingHours[dayName].start} -{" "}
-                      {barber.workingHours[dayName].end} */}
+                      {barber.workingHours[dayName].start} -{" "}
+                      {barber.workingHours[dayName].end}
                     </Badge>
-                    {/* {barber.workingHours[dayName].start ? (
+                    {barber.workingHours[dayName].start ? (
                       <Badge variant="outline" className="text-xs">
                         {t("availableToday")}
                       </Badge>
@@ -90,7 +103,7 @@ export function BarberSelection({
                       <Badge variant="outline" className="text-xs">
                         {t("notAvailableToday")}
                       </Badge>
-                    )} */}
+                    )}
                   </div>
                 </div>
               </div>
