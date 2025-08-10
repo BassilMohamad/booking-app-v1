@@ -90,7 +90,7 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
               <ImageWithFallback
-                src={barber?.image || ""}
+                src={barber?.photo || ""}
                 alt={barber?.name || ""}
                 className="w-full h-full object-cover"
               />

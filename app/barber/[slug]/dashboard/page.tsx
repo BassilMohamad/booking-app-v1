@@ -787,7 +787,7 @@ export default function OwnerDashboard() {
               {filteredBookings.map((booking) => {
                 const barber = barbers.find((b) => b.id === booking.barberId);
                 return (
-                  <TableRow key={`${booking.barberId}-${booking.date}`}>
+                  <TableRow key={`${booking.barberId}-${booking.customerName}`}>
                     <TableCell
                       className={locale === "ar" ? "text-right" : "text-left"}>
                       <div className="flex flex-col">
