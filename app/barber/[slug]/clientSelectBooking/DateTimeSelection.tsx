@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
-// import { Calendar } from "@/app/components/ui/calendar";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Clock, Calendar as CalendarIcon } from "lucide-react";
@@ -21,8 +20,23 @@ interface DateTimeSelectionProps {
   selectedDate?: string;
   selectedTime?: string;
   onDateSelect: (date: string) => void;
-  onTimeSelect: (time: string) => void;
+  onTimeSelect: (time: string | undefined) => void;
   shopSlug: string;
+}
+
+type Day = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+function getDayKey(date: Date): Day {
+  return date
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase() as Day;
+}
+
+function formatDateToISO(date: Date) {
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, "0");
+  const d = date.getDate().toString().padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 export function DateTimeSelection({
@@ -35,32 +49,58 @@ export function DateTimeSelection({
   shopSlug,
 }: DateTimeSelectionProps) {
   const { t } = useTranslation();
-  const { data: bookedSlots = [] } = useBookedSlots(
+  const { data: bookedSlots = [], isLoading } = useBookedSlots(
     shopSlug,
     barber.id,
     selectedDate
   );
 
-  const [calendarDate, setCalendarDate] = useState<Date | undefined>(
-    selectedDate ? new Date(selectedDate) : new Date()
-  );
+  // Start with no date selected to force user selection
+  const [calendarDate, setCalendarDate] = useState<Date | undefined>(undefined);
 
   const totalDuration = selectedServices.reduce(
     (sum, service) => sum + service.duration,
     0
   );
 
+  // Clear selectedTime when selectedDate changes
+  const handleDateSelect = (date: Date | undefined) => {
+    if (!date) return;
+    setCalendarDate(date);
+    onDateSelect(formatDateToISO(date));
+    onTimeSelect(undefined);
+  };
+
   const generateTimeSlots = () => {
-    const slots = [];
-    const [startHour, startMinute] = barber.workingHours.start
+    if (!calendarDate) return [];
+
+    const dayKey = getDayKey(calendarDate);
+    const dayWorkingHours = barber.workingHours[dayKey];
+
+    if (!dayWorkingHours || !dayWorkingHours.available) {
+      return [];
+    }
+
+    const [startHour, startMinute] = dayWorkingHours.start
       .split(":")
       .map(Number);
-    const [endHour, endMinute] = barber.workingHours.end.split(":").map(Number);
+    const [endHour, endMinute] = dayWorkingHours.end.split(":").map(Number);
 
     let currentTime = startHour * 60 + startMinute;
     const endTime = endHour * 60 + endMinute;
 
+    const now = new Date();
+    const isToday = calendarDate.toDateString() === now.toDateString();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    const slots = [];
+
     while (currentTime + totalDuration <= endTime) {
+      if (isToday && currentTime < currentMinutes) {
+        currentTime += 30;
+        continue;
+      }
+
       const hours = Math.floor(currentTime / 60);
       const minutes = currentTime % 60;
       const timeString = `${hours.toString().padStart(2, "0")}:${minutes
@@ -88,18 +128,8 @@ export function DateTimeSelection({
     return slots;
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
-    if (date) {
-      setCalendarDate(date);
-      const y = date.getFullYear();
-      const m = (date.getMonth() + 1).toString().padStart(2, "0");
-      const d = date.getDate().toString().padStart(2, "0");
-      onDateSelect(`${y}-${m}-${d}`);
-    }
-  };
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(true ? "ar-SA" : "en-US", {
+    return new Date(dateString).toLocaleDateString("ar-SA", {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -108,6 +138,14 @@ export function DateTimeSelection({
   };
 
   const timeSlots = generateTimeSlots();
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        Loading available times...
+      </div>
+    );
+  }
 
   return (
     <div className={cn("space-y-6")}>
@@ -145,7 +183,11 @@ export function DateTimeSelection({
           <div className={cn("flex justify-between items-center")}>
             <span>{t("workingHours")}</span>
             <Badge variant="outline" className={cn("text-xs")}>
-              {barber.workingHours.start} - {barber.workingHours.end}
+              {calendarDate
+                ? barber.workingHours[getDayKey(calendarDate)].start +
+                  " - " +
+                  barber.workingHours[getDayKey(calendarDate)].end
+                : "-"}
             </Badge>
           </div>
         </CardContent>
@@ -164,8 +206,20 @@ export function DateTimeSelection({
               mode="single"
               selected={calendarDate}
               onSelect={handleDateSelect}
-              disabled={(date) => date < new Date() || date.getDay() === 0}
-              // className="rounded-md border"
+              disabled={(date) => {
+                const todayMidnight = new Date();
+                todayMidnight.setHours(0, 0, 0, 0);
+                if (date < todayMidnight) return true;
+
+                const dayKey = getDayKey(date);
+                const dayInfo = barber.workingHours?.[dayKey];
+
+                if (!dayInfo || dayInfo.available === false) {
+                  return true;
+                }
+
+                return false;
+              }}
             />
             {selectedDate && (
               <div className="mt-4 p-3 bg-accent/50 rounded-md">
@@ -186,7 +240,7 @@ export function DateTimeSelection({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {!selectedDate ? (
+            {!calendarDate ? (
               <div className={cn("text-center py-8 text-muted-foreground")}>
                 <CalendarIcon
                   className={cn("w-12 h-12 mx-auto mb-4 opacity-50")}

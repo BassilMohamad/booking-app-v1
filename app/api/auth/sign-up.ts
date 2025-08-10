@@ -41,8 +41,6 @@ export const useSignUpWithOwner = () => {
         name: shopName,
         slug: slug,
         ownerId: user.uid,
-        address: "",
-        openingHours: { start: "", end: "" },
         services: [],
         barbers: [],
         createdAt: Date.now(),

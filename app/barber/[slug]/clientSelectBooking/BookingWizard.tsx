@@ -20,14 +20,24 @@ import { useParams } from "next/navigation";
 import { useShopBySlug } from "@/hooks/useShopBySlug";
 import { toast } from "sonner";
 
+export interface WorkingDay {
+  available: boolean;
+  start: string;
+  end: string;
+}
 export interface Barber {
   id: string;
   name: string;
   specialty: string;
   image: string;
   workingHours: {
-    start: string;
-    end: string;
+    mon: WorkingDay;
+    tue: WorkingDay;
+    wed: WorkingDay;
+    thu: WorkingDay;
+    fri: WorkingDay;
+    sat: WorkingDay;
+    sun: WorkingDay;
   };
   bookedSlots: string[];
 }
