@@ -130,11 +130,7 @@ export default function OwnerDashboard() {
   const [editingBarber, setEditingBarber] = useState<BarberForm>({});
   const [newBarber, setNewBarber] = useState<BarberForm>({});
 
-  const bookingPageUrl = `https://booking.yoursalon.com/${generateSalonId()}`;
-
-  function generateSalonId() {
-    return Math.random().toString(36).substring(2, 15);
-  }
+  const bookingPageUrl = `http://localhost:3000/barber/${shopSlug}`;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
