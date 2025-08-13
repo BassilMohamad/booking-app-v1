@@ -10,14 +10,7 @@ import {
 import { Badge } from "@/app/components/ui/badge";
 import { Separator } from "@/app/components/ui/separator";
 
-import {
-  Calendar,
-  Clock,
-  User,
-  Phone,
-  DollarSign,
-  Scissors,
-} from "lucide-react";
+import { Calendar, Clock, User, Phone, Scissors } from "lucide-react";
 import { type BookingData } from "./BookingWizard";
 import {
   Avatar,
@@ -39,6 +32,7 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
     0
   );
   const totalPrice = services.reduce((sum, service) => sum + service.price, 0);
+  console.log(totalPrice);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(true ? "ar-SA" : "en-US", {
@@ -134,7 +128,6 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
                 </div>
                 <div className="flex flex-col items-end space-y-1">
                   <Badge variant="outline" className="text-xs">
-                    <DollarSign className="w-3 h-3" />
                     {service.price}
                   </Badge>
                   <Badge variant="secondary" className="text-xs">
@@ -155,10 +148,7 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
                 <Clock className="w-3 h-3" />
                 {totalDuration} {t("minutes")}
               </Badge>
-              <Badge className="text-sm">
-                <DollarSign className="w-3 h-3" />
-                {totalPrice}
-              </Badge>
+              <Badge className="text-sm">{totalPrice}</Badge>
             </div>
           </div>
         </CardContent>

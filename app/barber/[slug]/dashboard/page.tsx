@@ -69,6 +69,8 @@ import {
   useDeleteService,
   useUpdateService,
 } from "@/app/api/useServesesHandling";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 type ServiceForm = Partial<Service>;
 
@@ -149,6 +151,27 @@ export default function OwnerDashboard() {
   });
 
   const bookingPageUrl = `https://booking-app-v1-six.vercel.app/barber/${shopSlug}`;
+
+  useEffect(() => {
+    const shopDocRef = doc(db, `shops/${shopSlug}`);
+    const unsubscribe = onSnapshot(
+      shopDocRef,
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          const updatedBookings: Booking[] = data.bookings || [];
+          setbookings(updatedBookings);
+        } else {
+          setbookings([]);
+        }
+      },
+      (error) => {
+        console.error("Firestore listener error:", error);
+        toast.error(t("toast.firestoreError"));
+      }
+    );
+    return () => unsubscribe();
+  }, [shopSlug, t]);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
