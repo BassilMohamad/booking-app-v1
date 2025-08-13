@@ -6,6 +6,12 @@
 body {
   margin: 0;
   overflow-x: hidden;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+:lang(ar),
+:where([class~="arabic-text"]) {
+  font-family: var(--font-noto-sans-arabic), sans-serif;
 }
 
 @theme inline {

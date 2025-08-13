@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Arabic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
@@ -14,6 +14,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const notoSansArabic = Noto_Sans_Arabic({
+  variable: "--font-noto-sans-arabic",
+  subsets: ["arabic", "latin"],
+  weight: ["500"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -48,7 +54,7 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSansArabic.variable} antialiased`}>
         <ReactQueryProvider>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </ReactQueryProvider>
