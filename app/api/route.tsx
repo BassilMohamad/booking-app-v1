@@ -17,7 +17,7 @@ function getClientIp(req: Request) {
 export async function POST(req: Request) {
   try {
     const ip = getClientIp(req);
-    console.log(ip);
+    console.log("Client IP:", ip);
 
     let body;
     try {
@@ -42,19 +42,25 @@ export async function POST(req: Request) {
 
     const shopData = shopSnap.data();
 
-    // 1. Limit by IP (check existing bookings in the array)
-    const ipBookings = (shopData.bookings || []).filter(
-      (b: any) => b.ip === ip
-    );
+    // 1. Limit by IP per hour
+    const ipBookingsThisHour = (shopData.bookings || []).filter((b: any) => {
+      if (b.ip !== ip) return false;
 
-    if (ipBookings.length >= 5) {
+      // booking.date = "YYYY-MM-DD", booking.time = "HH:mm"
+      const [newHour] = booking.time.split(":");
+      const [existingHour] = b.time.split(":");
+
+      return b.date === booking.date && existingHour === newHour;
+    });
+
+    if (ipBookingsThisHour.length >= 5) {
       return NextResponse.json(
-        { error: "Booking limit reached (max 5 per hour)" },
+        { error: "Booking limit reached (max 5 per hour for your IP)" },
         { status: 429 }
       );
     }
 
-    // 2. Prevent double-booking (check existing bookings in array)
+    // 2. Prevent double-booking
     const doubleBooked = (shopData.bookings || []).some(
       (b: any) =>
         b.barberId === booking.barberId &&
@@ -69,7 +75,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Add booking to the array
+    // 3. Add booking
     await updateDoc(shopRef, {
       bookings: arrayUnion({
         ...booking,

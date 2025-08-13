@@ -67,7 +67,7 @@ export function BookingWizard() {
   });
   const params = useParams();
   const shopSlug = params.slug as string;
-  const { mutate } = useAddBooking();
+  const { mutate, isPending } = useAddBooking();
 
   const { data, isLoading } = useShopBySlug(shopSlug);
   if (!data) return null;
@@ -272,6 +272,7 @@ export function BookingWizard() {
           </Button>
         ) : (
           <Button
+            disabled={isPending}
             onClick={() => {
               handleAAddBokkingHandler();
             }}>
