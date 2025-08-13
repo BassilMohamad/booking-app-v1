@@ -41,13 +41,8 @@ export function ContactForm({
   };
 
   const validatePhone = (value: string) => {
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
     if (!value.trim()) {
       setPhoneError(t("phoneRequired"));
-      return false;
-    }
-    if (!phoneRegex.test(value.replace(/[\s\-\(\)]/g, ""))) {
-      setPhoneError(t("phoneInvalid"));
       return false;
     }
     setPhoneError("");
