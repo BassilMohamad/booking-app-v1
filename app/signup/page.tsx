@@ -1,77 +1,167 @@
 "use client";
-import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 import { useSignUpWithOwner } from "@/app/api/auth/sign-up";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
+import { Label } from "@/app/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { InfoIcon } from "lucide-react";
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [shopName, setShopName] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { mutate } = useSignUpWithOwner();
+  const { t } = useTranslation();
+  const { mutate, isPending } = useSignUpWithOwner();
 
-  const handleSignUp = async () => {
-    if (!shopName.trim()) {
-      setError("Please enter a shop name.");
-      return;
-    }
+  const signUpSchema = z
+    .object({
+      shopName: z
+        .string()
+        .min(3, { message: t("signup.errors.shopNameMin") })
+        .regex(/^[a-z0-9 ]+$/i, {
+          message: t("signup.errors.shopNameEnglish"),
+        }),
+      email: z.string().email({ message: t("signup.errors.invalidEmail") }),
+      password: z.string().min(6, { message: t("signup.errors.passwordMin") }),
+      confirmPassword: z
+        .string()
+        .min(6, { message: t("signup.errors.confirmPasswordRequired") }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("signup.errors.passwordsMismatch"),
+      path: ["confirmPassword"],
+    });
 
-    setLoading(true);
-    setError(null);
+  type SignUpFormInputs = z.infer<typeof signUpSchema>;
 
-    const slug = shopName.trim().toLowerCase().replace(/\s+/g, "-");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormInputs>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const onSubmit = (data: SignUpFormInputs) => {
+    const slug = data.shopName.trim().toLowerCase().replace(/\s+/g, "-");
     mutate(
-      { email, password, shopName },
+      { email: data.email, password: data.password, shopName: data.shopName },
       {
-        onSuccess: () => {
-          router.push(`/barber/${slug}/dashboard`);
-        },
-        onError: (err) => {
-          console.error(err);
-          setError(err.message || "Sign-up failed. Please try again.");
-        },
+        onSuccess: () => router.push(`/barber/${slug}/dashboard`),
+        onError: () => toast.error(t("signup.signupFailed")),
       }
     );
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">Sign Up</h1>
-        <input
-          className="w-full border p-2 mb-3 rounded"
-          placeholder="Shop Name"
-          value={shopName}
-          onChange={(e) => setShopName(e.target.value)}
-        />
-        <input
-          className="w-full border p-2 mb-3 rounded"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          className="w-full border p-2 mb-3 rounded"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-center mb-3">{error}</p>}
-        <button
-          onClick={handleSignUp}
-          disabled={loading}
-          className={`w-full py-2 rounded text-white ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}>
-          {loading ? "Signing Up..." : "Sign Up"}
-        </button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-white px-4">
+      <div className="max-w-xl text-center mb-6">
+        <h1 className="text-3xl font-bold mb-2">{t("signup.appTitle")}</h1>
+        <p className="text-gray-600">{t("signup.appDescription")}</p>
       </div>
+
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl md:text-3xl">
+            {t("signup.title")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <Label>
+                {t("signup.shopName")}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      className="ml-1 flex h-4 w-4 items-center justify-center text-blue-500 p-0"
+                      aria-label="Info">
+                      <InfoIcon className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="right"
+                    align="start"
+                    className="max-w-xs">
+                    {t("signup.shopNameTooltip")}
+                  </TooltipContent>
+                </Tooltip>
+              </Label>
+              <Input
+                placeholder={t("signup.shopNamePlaceholder")}
+                {...register("shopName")}
+              />
+              {errors.shopName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.shopName.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>{t("signup.email")}</Label>
+              <Input
+                type="email"
+                placeholder={t("signup.emailPlaceholder")}
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>{t("signup.password")}</Label>
+              <Input
+                type="password"
+                placeholder={t("signup.passwordPlaceholder")}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>{t("signup.confirmPassword")}</Label>
+              <Input
+                type="password"
+                placeholder={t("signup.confirmPasswordPlaceholder")}
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? t("signup.signingUp") : t("signup.signUpButton")}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

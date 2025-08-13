@@ -202,5 +202,43 @@
   "qrcode.title": "QR Code for Booking Page",
   "qrcode.description": "Customers can scan this QR code to access your booking page",
   "qrcode.download": "Download",
-  "qrcode.copy": "Copy Image"
+  "qrcode.copy": "Copy Image",
+  "login": {
+    "title": "Owner Login",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email",
+    "invalidEmail": "Please enter a valid email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "invalidPassword": "Password must be at least 6 characters",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "loginFailed": "Login failed, please try again",
+    "noShopFound": "No shop found for this user"
+  },
+  "signup": {
+    "appTitle": "Barber Booking App",
+    "appDescription": "Easily manage barbers, bookings, and services in one place.",
+    "title": "Owner Sign Up",
+    "shopName": "Shop Name",
+    "shopNamePlaceholder": "Enter shop name in English",
+    "shopNameTooltip": "This name will be used to create a unique link for your shop. Only English letters and numbers are allowed.",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter password",
+    "signUpButton": "Sign Up",
+    "signingUp": "Signing up...",
+    "signupFailed": "Sign up failed, please try again",
+    "errors": {
+      "shopNameMin": "Shop name must be at least 3 characters",
+      "shopNameEnglish": "Shop name must be in English letters only",
+      "invalidEmail": "Please enter a valid email",
+      "passwordMin": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Confirming password is required",
+      "passwordsMismatch": "Passwords do not match"
+    }
+  }
 }

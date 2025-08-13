@@ -1,20 +1,51 @@
 "use client";
-import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+import { useSignIn } from "@/app/api/auth/sign-in";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useSignIn } from "@/app/api/auth/sign-in";
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
+import { Label } from "@/app/components/ui/label";
+import { toast } from "sonner";
+
+import { useTranslation } from "react-i18next";
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const router = useRouter();
-  const { mutate: signInMutate, error, isPending } = useSignIn();
+  const { t } = useTranslation();
 
-  const handleLogin = () => {
+  const { mutate: signInMutate, isPending } = useSignIn();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormInputs>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginFormInputs) => {
     signInMutate(
-      { email, password },
+      { email: data.email, password: data.password },
       {
         onSuccess: async (loggedInUser) => {
           const uid = loggedInUser.user.uid;
@@ -23,47 +54,64 @@ export default function LoginPage() {
           const q = query(shopsRef, where("ownerId", "==", uid));
           const querySnapshot = await getDocs(q);
 
-          const shopData = querySnapshot.docs[0].data();
-          const slug = shopData.slug;
-
-          router.push(`/barber/${slug}/dashboard`);
+          if (!querySnapshot.empty) {
+            const shopData = querySnapshot.docs[0].data();
+            router.push(`/barber/${shopData.slug}/dashboard`);
+          } else {
+            toast.error(t("login.noShopFound"));
+          }
         },
-        onError: (err) => {
-          console.log(err);
+        onError: () => {
+          toast.error(t("login.loginFailed"));
         },
       }
     );
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
-        <input
-          className="w-full border p-2 mb-3 rounded"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          className="w-full border p-2 mb-3 rounded"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-sm mb-3">{error.message}</p>}
-        <button
-          onClick={handleLogin}
-          disabled={isPending}
-          className={`w-full p-2 rounded text-white ${
-            isPending
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}>
-          {isPending ? "Logging in..." : "Login"}
-        </button>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white px-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl md:text-3xl">
+            {t("login.title")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <Label>{t("login.emailLabel")}</Label>
+              <Input
+                type="email"
+                placeholder={t("login.emailPlaceholder")}
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {t("login.invalidEmail")}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>{t("login.passwordLabel")}</Label>
+              <Input
+                type="password"
+                placeholder={t("login.passwordPlaceholder")}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {t("login.invalidPassword")}
+                </p>
+              )}
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? t("login.loggingIn") : t("login.loginButton")}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

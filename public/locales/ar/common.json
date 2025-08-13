@@ -202,5 +202,36 @@
   "qrcode.title": "رمز QR لصفحة الحجز",
   "qrcode.description": "يمكن للعملاء مسح هذا الرمز للوصول إلى صفحة الحجز الخاصة بك",
   "qrcode.download": "تنزيل",
-  "qrcode.copy": "نسخ الصورة"
+  "qrcode.copy": "نسخ الصورة",
+
+  "login": {
+    "title": "تسجيل دخول المالك",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "invalidEmail": "الرجاء إدخال بريد إلكتروني صالح",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "invalidPassword": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "loginButton": "تسجيل الدخول",
+    "loggingIn": "جاري تسجيل الدخول...",
+    "loginFailed": "فشل تسجيل الدخول، حاول مرة أخرى",
+    "noShopFound": "لم يتم العثور على متجر لهذا المستخدم"
+  },
+  "signup": {
+    "appTitle": "تطبيق حجز الحلاقين",
+    "appDescription": "إدارة الحلاقين والحجوزات والخدمات بسهولة في مكان واحد.",
+    "title": "تسجيل دخول المالك",
+    "shopName": "اسم المتجر",
+    "shopNamePlaceholder": "أدخل اسم المتجر باللغة الإنجليزية",
+    "shopNameTooltip": "سيتم استخدام هذا الاسم لإنشاء رابط فريد لمتجرك. يُسمح فقط بالحروف الإنجليزية والأرقام.",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "signUpButton": "تسجيل",
+    "signingUp": "جاري التسجيل...",
+    "signupFailed": "فشل التسجيل، حاول مرة أخرى"
+  }
 }
