@@ -6,7 +6,7 @@ import {
 } from "@/app/components/ui/card";
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { Badge } from "@/app/components/ui/badge";
-import { Clock, DollarSign } from "lucide-react";
+import { Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { type Service } from "./BookingWizard";
@@ -69,7 +69,7 @@ export function ServiceSelection({
                       {service.duration} {t("minutes")}
                     </Badge>
                     <Badge variant="outline" className="text-xs">
-                      <DollarSign className="w-3 h-3" />${service.price}
+                      {service.price}
                     </Badge>
                   </div>
                 </div>
@@ -82,9 +82,7 @@ export function ServiceSelection({
                       <Clock className="w-3 h-3" />
                       {totalDuration} {t("minutes")}
                     </Badge>
-                    <Badge className="text-xs">
-                      <DollarSign className="w-3 h-3" />${totalPrice}
-                    </Badge>
+                    <Badge className="text-xs">{totalPrice}</Badge>
                   </div>
                 </div>
               </div>
@@ -118,7 +116,8 @@ export function ServiceSelection({
                       <h3 className="truncate">{service.name}</h3>
                       <div className="flex flex-col items-end space-y-1">
                         <Badge variant="outline" className="text-xs">
-                          <DollarSign className="w-3 h-3" />${service.price}
+                          {t("form.price")} &nbsp;
+                          {service.price}
                         </Badge>
                         <Badge variant="secondary" className="text-xs">
                           <Clock className="w-3 h-3" />

@@ -14,6 +14,36 @@
   "doneBooking": "تم حجز موعدك بنجاح! 🎉",
   "at": "في",
   "notAvailableToday": "غير متاح اليوم",
+  "form.uploadPhoto": "رفع الصورة",
+  "form.removePhoto": "إزالة",
+  "form.serviceEdit": "تعديل الخدمة",
+  "form.serviceAdd": "إضافة خدمة جديدة",
+  "form.to": "إلى",
+  "form.editBarber": "تعديل الحلاق",
+  "form.workingHours": "ساعات العمل",
+  "services.duration": "المدة: {{duration}} دقيقة",
+  "services.price": "السعر: {{price}}",
+  "toast.noFileSelected": "يرجى اختيار ملف صورة",
+  "toast.invalidFileType": "يرجى رفع صورة صالحة (JPEG، PNG، أو GIF)",
+  "toast.fileTooLarge": "حجم الصورة يتجاوز حد 5 ميغابايت",
+  "toast.failedToReadFile": "فشل في قراءة ملف الصورة",
+  "toast.errorReadingFile": "خطأ في قراءة ملف الصورة",
+  "toast.barberAdded": "تمت إضافة الحلاق بنجاح",
+  "toast.barberAddFailed": "فشل في إضافة الحلاق",
+  "toast.barberNameRequired": "اسم الحلاق مطلوب",
+  "toast.barberUpdated": "تم تحديث الحلاق بنجاح",
+  "toast.barberUpdateFailed": "فشل في تحديث الحلاق",
+  "toast.barberDeleted": "تم حذف الحلاق بنجاح",
+  "toast.serviceAdded": "تمت إضافة الخدمة بنجاح",
+  "toast.serviceAddFailed": "فشل في إضافة الخدمة",
+  "toast.serviceFieldsRequired": "اسم الخدمة والسعر والمدة مطلوبة",
+  "toast.serviceUpdated": "تم تحديث الخدمة بنجاح",
+  "toast.serviceUpdateFailed": "فشل في تحديث الخدمة",
+  "toast.serviceDeleted": "تم حذف الخدمة بنجاح",
+  "toast.serviceDeleteFailed": "فشل في حذف الخدمة",
+  "toast.linkCopied": "تم نسخ الرابط إلى الحافظة",
+  "toast.linkCopyFailed": "فشل في نسخ الرابط",
+  "toast.shareNotSupported": "المشاركة غير مدعومة على هذا الجهاز",
   "steps": {
     "selectBarber": {
       "title": "اختر الحلاق",
@@ -163,7 +193,7 @@
   "form.phone": "الهاتف",
   "form.description": "الوصف",
   "form.duration": "المدة (بالدقائق)",
-  "form.price": "السعر ($)",
+  "form.price": "السعر",
   "form.save": "حفظ",
   "form.cancel": "إلغاء",
   "form.add": "إضافة",

@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 import { Textarea } from "@/app/components/ui/textarea";
-import { Calendar } from "@/app/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
@@ -154,19 +154,19 @@ export default function OwnerDashboard() {
     const file = event.target.files?.[0];
     if (!file) {
       console.error("No file selected");
-      toast.error("Please select an image file");
+      toast.error(t("toast.noFileSelected"));
       return;
     }
     const validTypes = ["image/jpeg", "image/png", "image/gif"];
     if (!validTypes.includes(file.type)) {
       console.error("Invalid file type:", file.type);
-      toast.error("Please upload a valid image (JPEG, PNG, or GIF)");
+      toast.error(t("toast.invalidFileType"));
       return;
     }
     const maxSize = 5 * 1024 * 1024; // 5MB limit
     if (file.size > maxSize) {
       console.error("File too large:", file.size);
-      toast.error("Image size exceeds 5MB limit");
+      toast.error(t("toast.fileTooLarge"));
       return;
     }
     const reader = new FileReader();
@@ -174,11 +174,10 @@ export default function OwnerDashboard() {
       const result = e.target?.result as string;
       if (!result) {
         console.error("FileReader failed to read file");
-        toast.error("Failed to read image file");
+        toast.error(t("toast.failedToReadFile"));
         return;
       }
       console.log("Image loaded:", result.substring(0, 50));
-      // Use isEditBarberOpen to determine if we're editing or adding
       if (isEditBarberOpen) {
         setEditingBarber({ ...editingBarber, photo: result });
       } else {
@@ -187,13 +186,12 @@ export default function OwnerDashboard() {
     };
     reader.onerror = () => {
       console.error("FileReader error");
-      toast.error("Error reading image file");
+      toast.error(t("toast.errorReadingFile"));
     };
     reader.readAsDataURL(file);
   };
 
   const handleAddBarber = () => {
-    console.log("Adding barber:", newBarber);
     if (newBarber.name) {
       const barber: BarberNewData = {
         id: generateBarberId,
@@ -202,22 +200,22 @@ export default function OwnerDashboard() {
         workingHours: newBarber.workingHours || defaultWorkingHours,
       };
       setIsAddBarberOpen(false);
-      toast.success("Barber added successfully");
       addNewBarberData(
         { shopSlug, barber: barber },
         {
           onError: (e) => {
             console.error("Add barber error:", e);
-            toast.error("Failed to add barber");
+            toast.error(t("toast.barberAddFailed"));
           },
           onSuccess: () => {
+            toast.success(t("toast.barberAdded"));
             setNewBarber({ photo: "", workingHours: defaultWorkingHours });
             refetch();
           },
         }
       );
     } else {
-      toast.error("Barber name is required");
+      toast.error(t("toast.barberNameRequired"));
     }
   };
 
@@ -238,15 +236,15 @@ export default function OwnerDashboard() {
               )
             );
             setIsEditBarberOpen(false);
-            toast.success("Barber updated successfully");
+            toast.success(t("toast.barberUpdated"));
           },
-          onError: (error) => {
-            toast.error(error.message || "Failed to update barber");
+          onError: () => {
+            toast.error(t("toast.barberUpdateFailed"));
           },
         }
       );
     } else {
-      toast.error("Barber name is required");
+      toast.error(t("toast.barberNameRequired"));
     }
   };
 
@@ -254,7 +252,7 @@ export default function OwnerDashboard() {
     deleteBarber({ shopSlug, barberId });
     refetch();
     setBarbers(barbers.filter((b) => b.id !== barberId));
-    toast.success("Barber deleted successfully");
+    toast.success(t("toast.barberDeleted"));
   };
 
   const handleAddService = () => {
@@ -275,16 +273,16 @@ export default function OwnerDashboard() {
         },
         {
           onSuccess: () => {
-            toast.success("Service added successfully");
+            toast.success(t("toast.serviceAdded"));
           },
           onError: (e) => {
             console.error("Add service error:", e);
-            toast.error("Failed to add service");
+            toast.error(t("toast.serviceAddFailed"));
           },
         }
       );
     } else {
-      toast.error("Service name, price, and duration are required");
+      toast.error(t("toast.serviceFieldsRequired"));
     }
   };
 
@@ -309,16 +307,15 @@ export default function OwnerDashboard() {
         { shopSlug, service: editingService as Service },
         {
           onSuccess: () => {
-            toast.success("Service updated successfully");
+            toast.success(t("toast.serviceUpdated"));
             refetch();
           },
-          onError: (err) =>
-            toast.error(err.message || "Failed to update service"),
+          onError: () => toast.error(t("toast.serviceUpdateFailed")),
         }
       );
       setIsEditServiceOpen(false);
     } else {
-      toast.error("Service name, price, and duration are required");
+      toast.error(t("toast.serviceFieldsRequired"));
     }
   };
 
@@ -327,11 +324,11 @@ export default function OwnerDashboard() {
       { shopSlug, serviceId },
       {
         onSuccess: () => {
-          toast.success("Service deleted successfully");
+          toast.success(t("toast.serviceDeleted"));
           refetch();
         },
-        onError: (error) => {
-          toast.error(error.message || "Failed to delete service");
+        onError: () => {
+          toast.error(t("toast.serviceDeleteFailed"));
         },
       }
     );
@@ -340,9 +337,9 @@ export default function OwnerDashboard() {
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(bookingPageUrl);
-      toast.success("Link copied to clipboard");
+      toast.success(t("toast.linkCopied"));
     } catch (error) {
-      toast.error("Failed to copy link");
+      toast.error(t("toast.linkCopyFailed"));
     }
   };
 
@@ -350,15 +347,15 @@ export default function OwnerDashboard() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Book an appointment",
-          text: "Book your appointment with our salon",
+          title: t("toast.shareTitle"),
+          text: t("toast.shareText"),
           url: bookingPageUrl,
         });
       } catch (error) {
         console.log("Share canceled");
       }
     } else {
-      toast.error("Share not supported on this device");
+      toast.error(t("toast.shareNotSupported"));
     }
   };
 
@@ -395,7 +392,7 @@ export default function OwnerDashboard() {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEdit ? "Edit Barber" : t("dashboard.barbers.add")}
+            {isEdit ? t("form.editBarber") : t("dashboard.barbers.add")}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -424,7 +421,7 @@ export default function OwnerDashboard() {
                   fileInputRef.current?.click();
                 }}>
                 <Upload className="h-4 w-4 mr-2" />
-                Upload Photo
+                {t("form.uploadPhoto")}
               </Button>
               {currentBarber?.photo && (
                 <Button
@@ -432,7 +429,7 @@ export default function OwnerDashboard() {
                   onClick={() =>
                     setCurrentBarber({ ...currentBarber, photo: "" })
                   }>
-                  Remove
+                  {t("form.removePhoto")}
                 </Button>
               )}
             </div>
@@ -451,7 +448,7 @@ export default function OwnerDashboard() {
             </div>
           </div>
           <div>
-            <Label>Working Hours</Label>
+            <Label>{t("form.workingHours")}</Label>
             <div className="space-y-3 mt-2">
               {days.map((day) => (
                 <div key={day} className="flex items-center justify-between">
@@ -512,7 +509,7 @@ export default function OwnerDashboard() {
                             }));
                           }}
                         />
-                        <span>to</span>
+                        <span>{t("form.to")}</span>
                         <Input
                           type="time"
                           className="w-30"
@@ -573,7 +570,7 @@ export default function OwnerDashboard() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {isEdit ? "Edit Service" : "Add New Service"}
+            {isEdit ? t("form.serviceEdit") : t("form.serviceAdd")}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -732,9 +729,11 @@ export default function OwnerDashboard() {
                   </p>
                   <div className="flex gap-4 mt-2">
                     <span className="text-sm">
-                      Duration: {service.duration}min
+                      {t("services.duration", { duration: service.duration })}
                     </span>
-                    <span className="text-sm">Price: ${service.price}</span>
+                    <span className="text-sm">
+                      {t("services.price", { price: service.price })}
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -759,7 +758,7 @@ export default function OwnerDashboard() {
       <Card>
         <CardHeader>
           <CardTitle>{t("dashboard.bookings.title")}</CardTitle>
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-4 flex-wrap">
             <Select value={selectedBarber} onValueChange={setSelectedBarber}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder={t("dashboard.bookings.filter.all")} />

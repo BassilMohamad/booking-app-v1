@@ -134,7 +134,8 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
                 </div>
                 <div className="flex flex-col items-end space-y-1">
                   <Badge variant="outline" className="text-xs">
-                    <DollarSign className="w-3 h-3" />${service.price}
+                    <DollarSign className="w-3 h-3" />
+                    {service.price}
                   </Badge>
                   <Badge variant="secondary" className="text-xs">
                     <Clock className="w-3 h-3" />
@@ -155,7 +156,8 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
                 {totalDuration} {t("minutes")}
               </Badge>
               <Badge className="text-sm">
-                <DollarSign className="w-3 h-3" />${totalPrice}
+                <DollarSign className="w-3 h-3" />
+                {totalPrice}
               </Badge>
             </div>
           </div>

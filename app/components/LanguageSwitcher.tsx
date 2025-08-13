@@ -82,7 +82,7 @@ export default function LanguageSwitcher({
             />
           </svg>
         )}
-        {i18n.resolvedLanguage === "ar" ? "العربية" : "English (US)"}
+        {i18n.resolvedLanguage === "ar" ? "العربية" : "En"}
       </button>
 
       {langOpen && (

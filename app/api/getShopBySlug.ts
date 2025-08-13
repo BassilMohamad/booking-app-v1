@@ -45,6 +45,7 @@ export interface Service {
 }
 
 export interface Shop {
+  id?: string;
   email: string;
   openingHours: OpeningHours;
   barbers: Barber[];
