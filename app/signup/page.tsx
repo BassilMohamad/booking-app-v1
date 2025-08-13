@@ -36,6 +36,9 @@ export default function SignUpPage() {
         .regex(/^[a-z0-9 ]+$/i, {
           message: t("signup.errors.shopNameEnglish"),
         }),
+      salonName: z
+        .string()
+        .min(2, { message: t("signup.errors.salonNameMin") }),
       email: z.string().email({ message: t("signup.errors.invalidEmail") }),
       password: z.string().min(6, { message: t("signup.errors.passwordMin") }),
       confirmPassword: z
@@ -59,11 +62,18 @@ export default function SignUpPage() {
 
   const onSubmit = (data: SignUpFormInputs) => {
     const slug = data.shopName.trim().toLowerCase().replace(/\s+/g, "-");
+
     mutate(
-      { email: data.email, password: data.password, shopName: data.shopName },
+      {
+        email: data.email,
+        password: data.password,
+        shopName: data.shopName,
+        salonName: data.salonName,
+      },
       {
         onSuccess: () => router.push(`/barber/${slug}/dashboard`),
-        onError: () => toast.error(t("signup.signupFailed")),
+        onError: (error) =>
+          toast.error(error.message || t("signup.signupFailed")),
       }
     );
   };
@@ -83,6 +93,20 @@ export default function SignUpPage() {
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            {/* Salon Name */}
+            <div>
+              <Label>{t("signup.salonName")}</Label>
+              <Input
+                placeholder={t("signup.salonNamePlaceholder")}
+                {...register("salonName")}
+              />
+              {errors.salonName && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.salonName.message}
+                </p>
+              )}
+            </div>
+            {/* Shop Name */}
             <div>
               <Label>
                 {t("signup.shopName")}
@@ -114,6 +138,7 @@ export default function SignUpPage() {
               )}
             </div>
 
+            {/* Email */}
             <div>
               <Label>{t("signup.email")}</Label>
               <Input
@@ -128,6 +153,7 @@ export default function SignUpPage() {
               )}
             </div>
 
+            {/* Password */}
             <div>
               <Label>{t("signup.password")}</Label>
               <Input
@@ -142,6 +168,7 @@ export default function SignUpPage() {
               )}
             </div>
 
+            {/* Confirm Password */}
             <div>
               <Label>{t("signup.confirmPassword")}</Label>
               <Input

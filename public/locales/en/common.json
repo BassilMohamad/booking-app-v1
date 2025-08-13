@@ -217,11 +217,13 @@
     "noShopFound": "No shop found for this user"
   },
   "signup": {
+    "salonName": "Salon Name",
+    "salonNamePlaceholder": "Enter your salon name",
     "appTitle": "Barber Booking App",
     "appDescription": "Easily manage barbers, bookings, and services in one place.",
     "title": "Owner Sign Up",
-    "shopName": "Shop Name",
-    "shopNamePlaceholder": "Enter shop name in English",
+    "shopName": "Your online salon name to be created",
+    "shopNamePlaceholder": "Enter your salon name in English",
     "shopNameTooltip": "This name will be used to create a unique link for your shop. Only English letters and numbers are allowed.",
     "email": "Email",
     "emailPlaceholder": "Enter your email",

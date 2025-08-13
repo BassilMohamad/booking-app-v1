@@ -216,7 +216,7 @@ export function BookingWizard() {
       {/* Progress Steps */}
       <Card>
         <CardHeader>
-          <CardTitle>{t("salonName")}</CardTitle>
+          <CardTitle>{data.salonName}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

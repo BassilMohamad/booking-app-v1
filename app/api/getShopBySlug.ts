@@ -55,6 +55,7 @@ export interface Shop {
   ownerId: string;
   services: Service[];
   createdAt: number;
+  salonName: string;
 }
 
 export const getShopBySlug = async (slug: string): Promise<Shop> => {
