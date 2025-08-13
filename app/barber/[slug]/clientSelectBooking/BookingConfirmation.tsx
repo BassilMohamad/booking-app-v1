@@ -198,7 +198,6 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
           <p className="text-sm text-muted-foreground">
             {t("notes.cancellation")}
           </p>
-          <p className="text-sm text-muted-foreground">{t("notes.reminder")}</p>
           <p className="text-sm text-muted-foreground">{t("notes.payment")}</p>
         </CardContent>
       </Card>
