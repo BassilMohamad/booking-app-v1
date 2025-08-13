@@ -109,8 +109,6 @@ export default function BarberSettings() {
   };
 
   const handleSaveProfile = () => {
-    // Save profile logic would go here
-    console.log("Saving profile:", profile);
     toast.success("Profile saved successfully");
   };
 

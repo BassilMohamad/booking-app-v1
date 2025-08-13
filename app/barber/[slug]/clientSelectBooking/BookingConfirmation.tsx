@@ -32,7 +32,6 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
     0
   );
   const totalPrice = services.reduce((sum, service) => sum + service.price, 0);
-  console.log(totalPrice);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(true ? "ar-SA" : "en-US", {

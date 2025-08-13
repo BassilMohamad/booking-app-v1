@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { db } from "@/lib/firebase";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 
-// Define what a booking looks like
 interface Booking {
   barberId: string;
   customerName: string;
@@ -20,10 +17,17 @@ interface AddBookingArgs {
 export const useAddBooking = () => {
   return useMutation<void, Error, AddBookingArgs>({
     mutationFn: async ({ shopSlug, booking }) => {
-      const shopRef = doc(db, "shops", shopSlug);
-      await updateDoc(shopRef, {
-        bookings: arrayUnion(booking),
+      const res = await fetch("/api/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shopSlug, booking }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to create booking");
+      }
     },
   });
 };

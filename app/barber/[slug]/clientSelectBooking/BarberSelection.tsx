@@ -50,8 +50,6 @@ export function BarberSelection({
     .toLocaleDateString("en-US", { weekday: "long" })
     .toLowerCase() as Day;
 
-  console.log(barbers);
-
   return (
     <div className="space-y-4">
       <div>

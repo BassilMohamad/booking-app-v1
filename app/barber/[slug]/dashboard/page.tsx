@@ -200,7 +200,7 @@ export default function OwnerDashboard() {
         toast.error(t("toast.failedToReadFile"));
         return;
       }
-      console.log("Image loaded:", result.substring(0, 50));
+
       if (isEditBarberOpen) {
         setEditingBarber({ ...editingBarber, photo: result });
       } else {
@@ -397,7 +397,7 @@ export default function OwnerDashboard() {
     setServices(data?.services || []);
     setbookings(data?.bookings || []);
     refetch();
-  }, [data, refetch]);
+  }, [refetch]);
 
   useEffect(() => {
     if (data) {
@@ -440,7 +440,6 @@ export default function OwnerDashboard() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  console.log("Upload button clicked");
                   fileInputRef.current?.click();
                 }}>
                 <Upload className="h-4 w-4 mr-2" />
