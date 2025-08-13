@@ -43,12 +43,11 @@ export async function POST(req: Request) {
     const shopData = shopSnap.data();
 
     // 1. Limit by IP (check existing bookings in the array)
-    const recentBookings = (shopData.bookings || []).filter(
-      (b: any) =>
-        b.ip === ip && b.createdAt?.toMillis() > Date.now() - 60 * 60 * 1000 // last 1 hour
+    const ipBookings = (shopData.bookings || []).filter(
+      (b: any) => b.ip === ip
     );
 
-    if (recentBookings.length >= 4) {
+    if (ipBookings.length >= 5) {
       return NextResponse.json(
         { error: "Booking limit reached (max 5 per hour)" },
         { status: 429 }
