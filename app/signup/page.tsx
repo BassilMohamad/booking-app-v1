@@ -40,10 +40,16 @@ export default function SignUpPage() {
         .string()
         .min(2, { message: t("signup.errors.salonNameMin") }),
       email: z.string().email({ message: t("signup.errors.invalidEmail") }),
-      password: z.string().min(6, { message: t("signup.errors.passwordMin") }),
+      password: z
+        .string()
+        .min(8, { message: t("signup.errors.passwordMin") })
+        .regex(/[A-Z]/, { message: t("signup.errors.passwordUppercase") })
+        .regex(/[a-z]/, { message: t("signup.errors.passwordLowercase") })
+        .regex(/[0-9]/, { message: t("signup.errors.passwordNumber") })
+        .regex(/[^A-Za-z0-9]/, { message: t("signup.errors.passwordSpecial") }),
       confirmPassword: z
         .string()
-        .min(6, { message: t("signup.errors.confirmPasswordRequired") }),
+        .min(8, { message: t("signup.errors.confirmPasswordRequired") }),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("signup.errors.passwordsMismatch"),
