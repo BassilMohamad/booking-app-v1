@@ -109,11 +109,8 @@ export default function OwnerDashboard() {
   const generatServiceId = data ? (data.services.length + 1).toString() : "1";
 
   const [barbers, setBarbers] = useState<BarberNewData[]>([]);
-
   const [services, setServices] = useState<Service[]>([]);
-
   const [bookings, setbookings] = useState<Booking[]>([]);
-
   const [selectedBarber, setSelectedBarber] = useState<string>("all");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -123,54 +120,104 @@ export default function OwnerDashboard() {
   const [isAddServiceOpen, setIsAddServiceOpen] = useState(false);
   const [isEditServiceOpen, setIsEditServiceOpen] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
-
   const [editingService, setEditingService] = useState<ServiceForm>({});
   const [newService, setNewService] = useState<ServiceForm>({});
-
   const [editingBarber, setEditingBarber] = useState<BarberForm>({});
-  const [newBarber, setNewBarber] = useState<BarberForm>({});
+  const days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
+  const defaultWorkingHours = days.reduce(
+    (acc, day) => ({
+      ...acc,
+      [day]: {
+        available: true,
+        start: "09:00",
+        end: "17:00",
+      },
+    }),
+    {}
+  );
+  const [newBarber, setNewBarber] = useState<BarberForm>({
+    photo: "",
+    workingHours: defaultWorkingHours,
+  });
 
   const bookingPageUrl = `https://booking-app-v1-six.vercel.app/barber/${shopSlug}`;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        if (editingBarber) {
-          setEditingBarber({ ...editingBarber, photo: result });
-        } else {
-          setNewBarber({ ...newBarber, photo: result });
-        }
-      };
-      reader.readAsDataURL(file);
+    if (!file) {
+      console.error("No file selected");
+      toast.error("Please select an image file");
+      return;
     }
+    const validTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!validTypes.includes(file.type)) {
+      console.error("Invalid file type:", file.type);
+      toast.error("Please upload a valid image (JPEG, PNG, or GIF)");
+      return;
+    }
+    const maxSize = 5 * 1024 * 1024; // 5MB limit
+    if (file.size > maxSize) {
+      console.error("File too large:", file.size);
+      toast.error("Image size exceeds 5MB limit");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      if (!result) {
+        console.error("FileReader failed to read file");
+        toast.error("Failed to read image file");
+        return;
+      }
+      console.log("Image loaded:", result.substring(0, 50));
+      // Use isEditBarberOpen to determine if we're editing or adding
+      if (isEditBarberOpen) {
+        setEditingBarber({ ...editingBarber, photo: result });
+      } else {
+        setNewBarber({ ...newBarber, photo: result });
+      }
+    };
+    reader.onerror = () => {
+      console.error("FileReader error");
+      toast.error("Error reading image file");
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleAddBarber = () => {
+    console.log("Adding barber:", newBarber);
     if (newBarber.name) {
       const barber: BarberNewData = {
         id: generateBarberId,
         name: newBarber.name,
         photo: newBarber.photo || "",
-        workingHours: newBarber.workingHours || {},
+        workingHours: newBarber.workingHours || defaultWorkingHours,
       };
-
       setIsAddBarberOpen(false);
       toast.success("Barber added successfully");
       addNewBarberData(
         { shopSlug, barber: barber },
         {
           onError: (e) => {
-            console.log(e);
+            console.error("Add barber error:", e);
+            toast.error("Failed to add barber");
           },
           onSuccess: () => {
-            setNewBarber({});
+            setNewBarber({ photo: "", workingHours: defaultWorkingHours });
             refetch();
           },
         }
       );
+    } else {
+      toast.error("Barber name is required");
     }
   };
 
@@ -180,7 +227,7 @@ export default function OwnerDashboard() {
   };
 
   const handleUpdateBarber = () => {
-    if (editingBarber) {
+    if (editingBarber && editingBarber.name) {
       updateBarber(
         { shopSlug, barber: editingBarber as BarberNewData },
         {
@@ -198,6 +245,8 @@ export default function OwnerDashboard() {
           },
         }
       );
+    } else {
+      toast.error("Barber name is required");
     }
   };
 
@@ -229,10 +278,13 @@ export default function OwnerDashboard() {
             toast.success("Service added successfully");
           },
           onError: (e) => {
-            console.log(e);
+            console.error("Add service error:", e);
+            toast.error("Failed to add service");
           },
         }
       );
+    } else {
+      toast.error("Service name, price, and duration are required");
     }
   };
 
@@ -242,13 +294,17 @@ export default function OwnerDashboard() {
   };
 
   const handleUpdateService = () => {
-    if (editingService) {
+    if (
+      editingService &&
+      editingService.name &&
+      editingService.price &&
+      editingService.duration
+    ) {
       setServices(
         services.map((s) =>
           s.id === editingService.id ? (editingService as Service) : s
         )
       );
-
       updateSer(
         { shopSlug, service: editingService as Service },
         {
@@ -256,11 +312,13 @@ export default function OwnerDashboard() {
             toast.success("Service updated successfully");
             refetch();
           },
-          onError: (err) => toast.error(err.message),
+          onError: (err) =>
+            toast.error(err.message || "Failed to update service"),
         }
       );
-
       setIsEditServiceOpen(false);
+    } else {
+      toast.error("Service name, price, and duration are required");
     }
   };
 
@@ -305,7 +363,7 @@ export default function OwnerDashboard() {
   };
 
   const filteredBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.date); // Convert string/timestamp to Date
+    const bookingDate = new Date(booking.date);
     const barberMatch =
       selectedBarber === "all" || booking.barberId === selectedBarber;
     const dateMatch =
@@ -313,13 +371,14 @@ export default function OwnerDashboard() {
       format(bookingDate, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
     return barberMatch && dateMatch;
   });
-  //mabe you should remove it ....
+
   useEffect(() => {
     setBarbers(data?.barbers || []);
     setServices(data?.services || []);
     setbookings(data?.bookings || []);
     refetch();
   }, [data, refetch]);
+
   useEffect(() => {
     if (data) {
       setBarbers(data.barbers || []);
@@ -327,16 +386,6 @@ export default function OwnerDashboard() {
       setbookings(data.bookings || []);
     }
   }, [data]);
-
-  const days = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
 
   const renderBarberDialog = (isEdit: boolean, barber?: BarberNewData) => {
     const currentBarber = isEdit ? editingBarber : newBarber;
@@ -370,7 +419,10 @@ export default function OwnerDashboard() {
               />
               <Button
                 variant="outline"
-                onClick={() => fileInputRef.current?.click()}>
+                onClick={() => {
+                  console.log("Upload button clicked");
+                  fileInputRef.current?.click();
+                }}>
                 <Upload className="h-4 w-4 mr-2" />
                 Upload Photo
               </Button>
@@ -378,7 +430,7 @@ export default function OwnerDashboard() {
                 <Button
                   variant="outline"
                   onClick={() =>
-                    setCurrentBarber({ ...currentBarber, photo: undefined })
+                    setCurrentBarber({ ...currentBarber, photo: "" })
                   }>
                   Remove
                 </Button>
@@ -408,8 +460,9 @@ export default function OwnerDashboard() {
                     <Switch
                       dir="ltr"
                       checked={
-                        currentBarber?.workingHours?.[day]?.available || false
+                        currentBarber?.workingHours?.[day]?.available ?? true
                       }
+                      disabled={false}
                       onCheckedChange={(checked) => {
                         setCurrentBarber({
                           ...currentBarber,
@@ -431,7 +484,6 @@ export default function OwnerDashboard() {
                     />
                     {currentBarber?.workingHours?.[day]?.available && (
                       <>
-                        {/* Start time (AM only) */}
                         <Input
                           type="time"
                           className="w-30"
@@ -442,9 +494,7 @@ export default function OwnerDashboard() {
                           max="11:59"
                           onChange={(e) => {
                             const newValue = e.target.value;
-                            // Prevent PM entry if typed manually
                             if (newValue >= "12:00") return;
-
                             setCurrentBarber((prev) => ({
                               ...prev,
                               workingHours: {
@@ -462,10 +512,7 @@ export default function OwnerDashboard() {
                             }));
                           }}
                         />
-
                         <span>to</span>
-
-                        {/* End time (PM only) */}
                         <Input
                           type="time"
                           className="w-30"
@@ -476,9 +523,7 @@ export default function OwnerDashboard() {
                           max="23:59"
                           onChange={(e) => {
                             const newValue = e.target.value;
-                            // Prevent AM entry if typed manually
                             if (newValue < "12:00") return;
-
                             setCurrentBarber((prev) => ({
                               ...prev,
                               workingHours: {
@@ -606,15 +651,12 @@ export default function OwnerDashboard() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
       <div>
         <h1>{t("dashboard.header.title")}</h1>
         <p className="text-muted-foreground">
           {t("dashboard.header.subtitle")}
         </p>
       </div>
-
-      {/* Barbers Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>{t("dashboard.barbers.title")}</CardTitle>
@@ -664,8 +706,6 @@ export default function OwnerDashboard() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Services Section */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>{t("dashboard.services.title")}</CardTitle>
@@ -716,8 +756,6 @@ export default function OwnerDashboard() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Bookings Section */}
       <Card>
         <CardHeader>
           <CardTitle>{t("dashboard.bookings.title")}</CardTitle>
@@ -818,8 +856,6 @@ export default function OwnerDashboard() {
           </Table>
         </CardContent>
       </Card>
-
-      {/* Sharing Section */}
       <Card>
         <CardHeader>
           <CardTitle>{t("dashboard.sharing.title")}</CardTitle>
@@ -847,18 +883,12 @@ export default function OwnerDashboard() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Edit Barber Dialog */}
       <Dialog open={isEditBarberOpen} onOpenChange={setIsEditBarberOpen}>
         {renderBarberDialog(true)}
       </Dialog>
-
-      {/* Edit Service Dialog */}
       <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
         {renderServiceDialog(true)}
       </Dialog>
-
-      {/* QR Code Generator */}
       <QRCodeGenerator
         url={bookingPageUrl}
         isOpen={showQRCode}
