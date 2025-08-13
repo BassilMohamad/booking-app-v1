@@ -130,7 +130,7 @@ export default function OwnerDashboard() {
   const [editingBarber, setEditingBarber] = useState<BarberForm>({});
   const [newBarber, setNewBarber] = useState<BarberForm>({});
 
-  const bookingPageUrl = `http://localhost:3000/barber/${shopSlug}`;
+  const bookingPageUrl = `https:/booking-app-v1-six.vercel.app/barber/${shopSlug}`;
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
