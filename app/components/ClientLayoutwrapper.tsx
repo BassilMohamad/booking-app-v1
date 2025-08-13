@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { dir } from "i18next";
 import Navbar from "@/app/components/Navbar";
 import { Toaster } from "sonner";
+import { GlobalLoadingSpinner } from "./GlobalLoadingSpiner";
 
 export default function ClientLayoutWrapper({
   children,
@@ -23,7 +24,10 @@ export default function ClientLayoutWrapper({
       <div className="h-[10vh] shrink-0">
         <Navbar />
       </div>
-      <main className="h-[90vh] overflow-auto bg-gray-100">{children}</main>
+      <main className="h-[90vh] overflow-auto bg-gray-100">
+        {children}
+        <GlobalLoadingSpinner />
+      </main>
       <Toaster richColors position="top-center" expand={false} />
     </div>
   );

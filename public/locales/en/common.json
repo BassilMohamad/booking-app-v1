@@ -12,6 +12,7 @@
   "salonName": "Elite Barber Salon",
   "bookingSubtitle": "Book your appointment with our professional barbers",
   "doneBooking": "Your booking was successful! 🎉",
+  "notAvailableToday": "Not available today",
   "at": "at",
   "steps": {
     "selectBarber": {

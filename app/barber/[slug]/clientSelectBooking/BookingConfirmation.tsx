@@ -9,7 +9,7 @@ import {
 } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { Separator } from "@/app/components/ui/separator";
-import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
+
 import {
   Calendar,
   Clock,
@@ -19,6 +19,11 @@ import {
   Scissors,
 } from "lucide-react";
 import { type BookingData } from "./BookingWizard";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/app/components/ui/avatar";
 
 interface BookingConfirmationProps {
   bookingData: BookingData;
@@ -88,13 +93,20 @@ export function BookingConfirmation({ bookingData }: BookingConfirmationProps) {
           <Separator />
 
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-              <ImageWithFallback
-                src={barber?.photo || ""}
-                alt={barber?.name || ""}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+              <Avatar className="w-16 h-16 flex-shrink-0">
+                {barber?.photo ? (
+                  <AvatarImage src={barber.photo} alt={barber.name} />
+                ) : (
+                  <AvatarFallback className="flex items-center justify-center w-full h-full">
+                    {barber?.name
+                      ? barber.name.slice(0, 2).toUpperCase()
+                      : "BB"}
+                  </AvatarFallback>
+                )}
+              </Avatar>
             </div>
+
             <div>
               <p className="font-medium">{barber?.name}</p>
               <p className="text-sm text-muted-foreground">
