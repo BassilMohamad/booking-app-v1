@@ -2,13 +2,13 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDy1hlfu2GR-lwLQPfIEAt9qiWTF3GHX24",
-  authDomain: "booking-app-b2ab1.firebaseapp.com",
-  projectId: "booking-app-b2ab1",
-  storageBucket: "booking-app-b2ab1.firebasestorage.app",
-  messagingSenderId: "257832145790",
-  appId: "1:257832145790:web:eb416ac50d0ae464b5592f",
+export const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
