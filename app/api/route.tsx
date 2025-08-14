@@ -42,18 +42,22 @@ export async function POST(req: Request) {
 
     const shopData = shopSnap.data();
 
-    // 1. Limit by IP per hour
+    // 1. Limit by IP per hour (based on actual creation time)
+    const now = Timestamp.now().toDate();
+    const currentHour = now.getHours();
+    const currentDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+
     const ipBookingsThisHour = (shopData.bookings || []).filter((b: any) => {
-      if (b.ip !== ip) return false;
+      if (b.ip !== ip || !b.createdAt) return false;
 
-      // booking.date = "YYYY-MM-DD", booking.time = "HH:mm"
-      const [newHour] = booking.time.split(":");
-      const [existingHour] = b.time.split(":");
+      const created = b.createdAt.toDate();
+      const createdHour = created.getHours();
+      const createdDate = created.toISOString().split("T")[0];
 
-      return b.date === booking.date && existingHour === newHour;
+      return createdDate === currentDate && createdHour === currentHour;
     });
 
-    if (ipBookingsThisHour.length >= 5) {
+    if (ipBookingsThisHour.length >= 4) {
       return NextResponse.json(
         { error: "Booking limit reached (max 5 per hour for your IP)" },
         { status: 429 }
@@ -75,7 +79,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Add booking
+    // 3. Add booking with server-side timestamp
     await updateDoc(shopRef, {
       bookings: arrayUnion({
         ...booking,

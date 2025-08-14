@@ -1,4 +1,8 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
+import { useAuth } from "@/hooks/useAuth";
+
 import { useState, useRef, useEffect } from "react";
 import {
   Card,
@@ -8,7 +12,6 @@ import {
 } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Badge } from "@/app/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -406,6 +409,15 @@ export default function OwnerDashboard() {
       setbookings(data.bookings || []);
     }
   }, [data]);
+
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [user, loading, router]);
 
   const renderBarberDialog = (isEdit: boolean, barber?: BarberNewData) => {
     const currentBarber = isEdit ? editingBarber : newBarber;
