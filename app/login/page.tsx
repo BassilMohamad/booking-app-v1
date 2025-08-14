@@ -21,6 +21,7 @@ import { Label } from "@/app/components/ui/label";
 import { toast } from "sonner";
 
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -33,7 +34,8 @@ export default function LoginPage() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const { mutate: signInMutate, isPending } = useSignIn();
+  const { mutate: signInMutate } = useSignIn();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -44,25 +46,35 @@ export default function LoginPage() {
   });
 
   const onSubmit = (data: LoginFormInputs) => {
+    setIsLoading(true);
     signInMutate(
       { email: data.email, password: data.password },
       {
-        onSuccess: async (loggedInUser) => {
+        onSuccess: (loggedInUser) => {
           const uid = loggedInUser.user.uid;
 
           const shopsRef = collection(db, "shops");
           const q = query(shopsRef, where("ownerId", "==", uid));
-          const querySnapshot = await getDocs(q);
 
-          if (!querySnapshot.empty) {
-            const shopData = querySnapshot.docs[0].data();
-            router.push(`/barber/${shopData.slug}/dashboard`);
-          } else {
-            toast.error(t("login.noShopFound"));
-          }
+          getDocs(q)
+            .then((querySnapshot) => {
+              if (!querySnapshot.empty) {
+                const shopData = querySnapshot.docs[0].data();
+                router.push(`/barber/${shopData.slug}/dashboard`);
+              } else {
+                toast.error(t("login.noShopFound"));
+              }
+            })
+            .catch(() => {
+              toast.error(t("login.loginFailed"));
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
         },
         onError: () => {
           toast.error(t("login.loginFailed"));
+          setIsLoading(false);
         },
       }
     );
@@ -106,8 +118,8 @@ export default function LoginPage() {
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? t("login.loggingIn") : t("login.loginButton")}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? t("login.loggingIn") : t("login.loginButton")}
             </Button>
           </form>
         </CardContent>
