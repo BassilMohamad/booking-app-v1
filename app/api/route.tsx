@@ -8,26 +8,12 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-// Get client IP
-function getClientIp(req: Request) {
-  const forwarded = req.headers.get("x-forwarded-for");
-  return forwarded ? forwarded.split(",")[0].trim() : "unknown";
-}
-
 export async function POST(req: Request) {
   try {
-    const ip = getClientIp(req);
-    console.log("Client IP:", ip);
+    const body = await req.json();
+    const { shopSlug, booking, clientId } = body;
 
-    let body;
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-    }
-
-    const { shopSlug, booking } = body;
-    if (!shopSlug || !booking) {
+    if (!shopSlug || !booking || !clientId) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -42,36 +28,37 @@ export async function POST(req: Request) {
 
     const shopData = shopSnap.data();
 
-    // 1. Limit by IP per hour (based on actual creation time)
     const now = Timestamp.now().toDate();
     const currentHour = now.getHours();
-    const currentDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+    const currentDate = now.toISOString().split("T")[0];
 
-    const ipBookingsThisHour = (shopData.bookings || []).filter((b: any) => {
-      if (b.ip !== ip || !b.createdAt) return false;
-
-      const created = b.createdAt.toDate();
-      const createdHour = created.getHours();
-      const createdDate = created.toISOString().split("T")[0];
-
-      return createdDate === currentDate && createdHour === currentHour;
+    // Limit per clientId per hour
+    const bookingsThisHour = (shopData.bookings || []).filter((b: any) => {
+      if (b.clientId !== clientId || !b.createdAt) return false;
+      const created =
+        b.createdAt instanceof Timestamp
+          ? b.createdAt.toDate()
+          : new Date(b.createdAt);
+      return (
+        created.toISOString().split("T")[0] === currentDate &&
+        created.getHours() === currentHour
+      );
     });
 
-    if (ipBookingsThisHour.length >= 4) {
+    if (bookingsThisHour.length >= 5) {
       return NextResponse.json(
-        { error: "Booking limit reached (max 5 per hour for your IP)" },
+        { error: "Booking limit reached (max 5 per hour)" },
         { status: 429 }
       );
     }
 
-    // 2. Prevent double-booking
+    // Prevent double-booking
     const doubleBooked = (shopData.bookings || []).some(
       (b: any) =>
         b.barberId === booking.barberId &&
         b.date === booking.date &&
         b.time === booking.time
     );
-
     if (doubleBooked) {
       return NextResponse.json(
         { error: "Time slot already booked" },
@@ -79,11 +66,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Add booking with server-side timestamp
+    // Add booking
     await updateDoc(shopRef, {
       bookings: arrayUnion({
         ...booking,
-        ip,
+        clientId,
         createdAt: Timestamp.now(),
       }),
     });

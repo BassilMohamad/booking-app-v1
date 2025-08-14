@@ -1,3 +1,4 @@
+import { getClientId } from "@/hooks/getClientId";
 import { useMutation } from "@tanstack/react-query";
 
 interface Booking {
@@ -20,7 +21,7 @@ export const useAddBooking = () => {
       const res = await fetch("/api/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shopSlug, booking }),
+        body: JSON.stringify({ shopSlug, booking, clientId: getClientId() }),
       });
 
       const data = await res.json();
