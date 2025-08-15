@@ -275,5 +275,43 @@
     "signUpButton": "تسجيل",
     "signingUp": "جاري التسجيل...",
     "signupFailed": "فشل التسجيل، حاول مرة أخرى"
+  },
+  "nav.landing": "الرئيسية",
+  "landing.hero.title": "انشئ صالونك الإلكتروني",
+  "landing.hero.subtitle": "يمكنك إدارة عدة حلاقين، وساعات عملهم وخدماتهم، وحجوزات العملاء في صالونك من خلال منصة واحدة.",
+  "landing.hero.cta.book": "ابدأ الآن",
+  "landing.hero.cta.services": "سجل دخول",
+  "landing.pricing.title": "اختر خطتك المثالية",
+  "landing.pricing.subtitle": "خطط مرنة لإدارة الصالونات والحجوزات بكل سهولة",
+  "landing.pricing.basic.title": "تجربة مجانية",
+  "landing.pricing.basic.price": "مجاني لأول شهرين",
+  "landing.pricing.basic.features.1": "إنشاء وإدارة ملف الصالون",
+  "landing.pricing.basic.features.2": "إضافة حلاق وتحديد ساعات العمل",
+  "landing.pricing.basic.features.3": "إنشاء رابط حجز قابل للمشاركة",
+
+  "landing.pricing.premium.title": "اشتراك شهري",
+  "landing.pricing.premium.price": "9.99$ / شهريًا",
+  "landing.pricing.premium.features.1": "إدارة عدة صالونات",
+  "landing.pricing.premium.features.2": "إدارة عدة حلاقين",
+  "landing.pricing.premium.features.3": "حجوزات غير محدودة",
+  "landing.pricing.premium.features.4": "عرض وتصدير سجل الحجوزات",
+  "landing.pricing.premium.popular": "الأكثر شيوعًا",
+
+  "landing.pricing.vip.title": "اشتراك سنوي",
+  "landing.pricing.vip.price": "99.99$ / سنويًا",
+  "landing.pricing.vip.features.1": "جميع ميزات الاشتراك الشهري",
+  "landing.pricing.vip.features.2": "دعم أولوية",
+  "landing.pricing.vip.features.3": "لوحة تحليلات للحجوزات",
+  "landing.pricing.vip.features.4": "تخصيص العلامة التجارية للصالون",
+  "landing.pricing.vip.features.5": "الوصول المبكر للميزات الجديدة",
+  "footer.contact.title": "اتصل بنا",
+  "footer.contact.address": "المنصة متاحة لجميع الصالونات في مدينتك",
+  "footer.contact.phone": "+962 770151780",
+  "footer.contact.email": "bassiljarrah2@gmail.com",
+  "footer.follow.title": "راسلنا",
+  "footer.copyright": "© 2025 TarteebPro. جميع الحقوق محفوظة.",
+  "footer": {
+    "madeWith": "مصنوعة بحب",
+    "by": "بواسطة"
   }
 }

@@ -283,5 +283,43 @@
       "confirmPasswordRequired": "Confirming password is required",
       "passwordsMismatch": "Passwords do not match"
     }
+  },
+  "nav.landing": "Home",
+  "landing.hero.title": "Create Your Online Salon",
+  "landing.hero.subtitle": "You can manage multiple barbers, their working hours, services, and customer bookings in your salon through a single platform.",
+  "landing.hero.cta.book": "Get Started",
+  "landing.hero.cta.services": "Login in",
+  "landing.pricing.title": "Choose Your Perfect Plan",
+  "landing.pricing.subtitle": "Flexible plans to manage salons and bookings effortlessly",
+  "landing.pricing.basic.title": "Free Trial",
+  "landing.pricing.basic.price": "Free for 2 months",
+  "landing.pricing.basic.features.1": "Create and manage a salon profile",
+  "landing.pricing.basic.features.2": "Add a barber and set working hours",
+  "landing.pricing.basic.features.3": "Generate shareable booking URL",
+
+  "landing.pricing.premium.title": "Monthly Subscription",
+  "landing.pricing.premium.price": "$9.99 / month",
+  "landing.pricing.premium.features.1": "Manage multiple salons",
+  "landing.pricing.premium.features.2": "Manage multiple barbers",
+  "landing.pricing.premium.features.3": "Unlimited bookings",
+  "landing.pricing.premium.features.4": "View and export booking history",
+  "landing.pricing.premium.popular": "Most Popular",
+
+  "landing.pricing.vip.title": "Yearly Subscription",
+  "landing.pricing.vip.price": "$99.99 / year",
+  "landing.pricing.vip.features.1": "All Monthly Subscription features",
+  "landing.pricing.vip.features.2": "Priority support",
+  "landing.pricing.vip.features.3": "Analytics dashboard for bookings",
+  "landing.pricing.vip.features.4": "Custom branding for salon",
+  "landing.pricing.vip.features.5": "Early access to new features",
+  "footer.contact.title": "Contact Us",
+  "footer.contact.address": "Platform available for all salons in your city",
+  "footer.contact.phone": "+962770151780",
+  "footer.contact.email": "bassiljarrah2@gmail.com",
+  "footer.follow.title": "Send a message to us",
+  "footer.copyright": "© 2025 TarteebPro. All rights reserved.",
+  "footer": {
+    "madeWith": "Made with",
+    "by": "by"
   }
 }
