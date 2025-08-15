@@ -300,6 +300,7 @@ export default function OwnerDashboard() {
         {
           onSuccess: () => {
             toast.success(t("toast.serviceAdded"));
+            setNewService({});
           },
           onError: (e) => {
             console.error("Add service error:", e);

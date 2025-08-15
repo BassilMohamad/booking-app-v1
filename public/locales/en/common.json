@@ -9,6 +9,13 @@
     "logout": "Logout",
     "main": "Home"
   },
+  "qr": {
+    "title": "QR Code for Booking Page",
+    "description": "Customers can scan this QR code to access your booking page",
+    "downloadButton": "Download",
+    "copyButton": "Copy Image",
+    "filename": "booking-qr-code.png"
+  },
   "salonName": "Elite Barber Salon",
   "bookingSubtitle": "Book your appointment with our professional barbers",
   "doneBooking": "Your booking was successful! 🎉",
