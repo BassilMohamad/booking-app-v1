@@ -14,7 +14,10 @@
     "description": "يمكن للعملاء مسح هذا الرمز للوصول إلى صفحة الحجز الخاصة بك",
     "downloadButton": "تحميل",
     "copyButton": "نسخ الصورة",
-    "filename": "رمز-الحجز.png"
+    "filename": "رمز-الحجز.png",
+    "toastDownload": "تم تحميل رمز QR بنجاح",
+    "toastCopy": "تم نسخ رمز QR إلى الحافظة",
+    "toastCopyError": "فشل نسخ رمز QR"
   },
   "salonName": "صالون النخبة للحلاقة",
   "bookingSubtitle": "احجز موعدك مع محترفينا من الحلاقين",

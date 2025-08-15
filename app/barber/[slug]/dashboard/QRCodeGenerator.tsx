@@ -10,6 +10,7 @@ import {
 import { Button } from "@/app/components/ui/button";
 import { Download, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 interface QRCodeGeneratorProps {
   url: string;
@@ -49,9 +50,10 @@ export default function QRCodeGenerator({
   const handleDownload = () => {
     if (qrDataUrl) {
       const link = document.createElement("a");
-      link.download = t("qr.filename"); // e.g. "booking-qr-code.png"
+      link.download = t("qr.filename");
       link.href = qrDataUrl;
       link.click();
+      toast.success(t("qr.toastDownload")); // ✅ show translated toast
     }
   };
 
@@ -63,8 +65,10 @@ export default function QRCodeGenerator({
         await navigator.clipboard.write([
           new ClipboardItem({ "image/png": blob }),
         ]);
+        toast.success(t("qr.toastCopy")); // ✅ show translated toast
       } catch (error) {
         console.error("Failed to copy image:", error);
+        toast.error(t("qr.toastCopyError")); // ✅ error toast
       }
     }
   };

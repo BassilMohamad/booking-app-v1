@@ -14,7 +14,10 @@
     "description": "Customers can scan this QR code to access your booking page",
     "downloadButton": "Download",
     "copyButton": "Copy Image",
-    "filename": "booking-qr-code.png"
+    "filename": "booking-qr-code.png",
+    "toastDownload": "QR code downloaded successfully",
+    "toastCopy": "QR code copied to clipboard",
+    "toastCopyError": "Failed to copy QR code"
   },
   "salonName": "Elite Barber Salon",
   "bookingSubtitle": "Book your appointment with our professional barbers",
