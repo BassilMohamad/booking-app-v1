@@ -153,7 +153,7 @@ export default function OwnerDashboard() {
     workingHours: defaultWorkingHours,
   });
 
-  const bookingPageUrl = `https://booking-app-v1-six.vercel.app/barber/${shopSlug}`;
+  const bookingPageUrl = `https://www.tarteebpro.com/barber/${shopSlug}`;
 
   useEffect(() => {
     const shopDocRef = doc(db, `shops/${shopSlug}`);
