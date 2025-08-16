@@ -239,6 +239,7 @@
   "table.service": "الخدمة",
   "table.datetime": "التاريخ والوقت",
   "table.status": "الحالة",
+  "table.actions": "الإجراءات",
   "qrcode.title": "رمز QR لصفحة الحجز",
   "qrcode.description": "يمكن للعملاء مسح هذا الرمز للوصول إلى صفحة الحجز الخاصة بك",
   "qrcode.download": "تنزيل",
@@ -328,5 +329,23 @@
       "confirmPasswordRequired": "الرجاء تأكيد كلمة المرور.",
       "passwordsMismatch": "كلمتا المرور غير متطابقتين."
     }
+  },
+  "confirm": {
+    "title": "حذف الحجز",
+    "message": "هل أنت متأكد أنك تريد حذف هذا الحجز؟",
+    "details": {
+      "customer": "العميل",
+      "barber": "الحلاق",
+      "service": "الخدمة",
+      "date": "التاريخ",
+      "time": "الوقت"
+    },
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "deleting": "جارٍ الحذف..."
+  },
+  "toast": {
+    "bookingDeleted": "تم حذف الحجز بنجاح.",
+    "bookingDeleteFailed": "فشل في حذف الحجز. حاول مرة أخرى."
   }
 }

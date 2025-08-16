@@ -240,6 +240,7 @@
   "table.service": "Service",
   "table.datetime": "Date & Time",
   "table.status": "Status",
+  "table.actions": "Actions",
   "qrcode.title": "QR Code for Booking Page",
   "qrcode.description": "Customers can scan this QR code to access your booking page",
   "qrcode.download": "Download",
@@ -336,5 +337,23 @@
       "confirmPasswordRequired": "Please confirm your password.",
       "passwordsMismatch": "Passwords do not match."
     }
+  },
+  "confirm": {
+    "title": "Delete Booking",
+    "message": "Are you sure you want to delete this booking?",
+    "details": {
+      "customer": "Customer",
+      "barber": "Barber",
+      "service": "Service",
+      "date": "Date",
+      "time": "Time"
+    },
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting..."
+  },
+  "toast": {
+    "bookingDeleted": "Booking deleted successfully.",
+    "bookingDeleteFailed": "Failed to delete booking. Please try again."
   }
 }

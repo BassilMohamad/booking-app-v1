@@ -15,6 +15,8 @@ import { Input } from "@/app/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -73,6 +75,7 @@ import {
   useUpdateService,
 } from "@/app/api/useServesesHandling";
 import { doc, onSnapshot } from "firebase/firestore";
+import { useDeleteBooking } from "@/app/api/useDeleteBooking";
 import { db } from "@/lib/firebase";
 
 type ServiceForm = Partial<Service>;
@@ -128,6 +131,9 @@ export default function OwnerDashboard() {
   const [editingService, setEditingService] = useState<ServiceForm>({});
   const [newService, setNewService] = useState<ServiceForm>({});
   const [editingBarber, setEditingBarber] = useState<BarberForm>({});
+  const { mutate: deleteBooking, isPending: isDeleting } = useDeleteBooking();
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Booking | null>(null);
   const days = [
     "monday",
     "tuesday",
@@ -849,6 +855,10 @@ export default function OwnerDashboard() {
                   className={locale === "ar" ? "text-right" : "text-left"}>
                   {t("table.datetime")}
                 </TableHead>
+                <TableHead
+                  className={locale === "ar" ? "text-right" : "text-left"}>
+                  {t("table.actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -882,6 +892,19 @@ export default function OwnerDashboard() {
                     <TableCell
                       className={locale === "ar" ? "text-right" : "text-left"}>
                       {booking.date} {t("at")} {booking.time}
+                    </TableCell>
+                    <TableCell
+                      className={locale === "ar" ? "text-right" : "text-left"}>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          setDeleteTarget(booking);
+                          setIsDeleteOpen(true);
+                        }}
+                        disabled={isDeleting}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );
@@ -922,6 +945,75 @@ export default function OwnerDashboard() {
       </Dialog>
       <Dialog open={isEditServiceOpen} onOpenChange={setIsEditServiceOpen}>
         {renderServiceDialog(true)}
+      </Dialog>
+      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t("confirm.title")}</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-3 text-sm">
+            <p className="text-muted-foreground">{t("confirm.message")}</p>
+
+            {deleteTarget && (
+              <div className="rounded-lg border p-3">
+                <div className="grid gap-1">
+                  <div>
+                    <span className="font-semibold">
+                      {t("table.customer")}:
+                    </span>{" "}
+                    {deleteTarget.customerName}
+                  </div>
+                  <div>
+                    <span className="font-semibold">{t("table.barber")}:</span>{" "}
+                    {barbers.find((b) => b.id === deleteTarget.barberId)
+                      ?.name ?? "-"}
+                  </div>
+                  <div>
+                    <span className="font-semibold">{t("table.service")}:</span>{" "}
+                    {deleteTarget.service
+                      .map(
+                        (sid) => data?.services.find((s) => s.id === sid)?.name
+                      )
+                      .filter(Boolean)
+                      .join(", ")}
+                  </div>
+                  <div>
+                    <span className="font-semibold">
+                      {t("table.datetime")}:
+                    </span>{" "}
+                    {deleteTarget.date} {t("at")} {deleteTarget.time}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>
+              {t("form.cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={isDeleting || !deleteTarget}
+              onClick={() => {
+                if (!deleteTarget) return;
+                deleteBooking(
+                  { shopSlug, booking: deleteTarget },
+                  {
+                    onSuccess: () => {
+                      toast.success(t("toast.bookingDeleted"));
+                      setIsDeleteOpen(false);
+                      setDeleteTarget(null);
+                    },
+                    onError: () => toast.error(t("toast.bookingDeleteFailed")),
+                  }
+                );
+              }}>
+              {isDeleting ? t("confirm.deleting") : t("confirm.delete")}
+            </Button>
+          </div>
+        </DialogContent>
       </Dialog>
       <QRCodeGenerator
         url={bookingPageUrl}
