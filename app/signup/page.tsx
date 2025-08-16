@@ -32,27 +32,31 @@ export default function SignUpPage() {
     .object({
       shopName: z
         .string()
-        .min(3, { message: t("signup.errors.shopNameMin") })
+        .min(3, { message: t("signupScheme.errors.shopNameMin") })
         .regex(/^[a-z0-9 ]+$/i, {
-          message: t("signup.errors.shopNameEnglish"),
+          message: t("signupScheme.errors.shopNameEnglish"),
         }),
       salonName: z
         .string()
-        .min(2, { message: t("signup.errors.salonNameMin") }),
-      email: z.string().email({ message: t("signup.errors.invalidEmail") }),
+        .min(2, { message: t("signupScheme.errors.salonNameMin") }),
+      email: z
+        .string()
+        .email({ message: t("signupScheme.errors.invalidEmail") }),
       password: z
         .string()
-        .min(8, { message: t("signup.errors.passwordMin") })
-        .regex(/[A-Z]/, { message: t("signup.errors.passwordUppercase") })
-        .regex(/[a-z]/, { message: t("signup.errors.passwordLowercase") })
-        .regex(/[0-9]/, { message: t("signup.errors.passwordNumber") })
-        .regex(/[^A-Za-z0-9]/, { message: t("signup.errors.passwordSpecial") }),
+        .min(8, { message: t("signupScheme.errors.passwordMin") })
+        .regex(/[A-Z]/, { message: t("signupScheme.errors.passwordUppercase") })
+        .regex(/[a-z]/, { message: t("signupScheme.errors.passwordLowercase") })
+        .regex(/[0-9]/, { message: t("signupScheme.errors.passwordNumber") })
+        .regex(/[^A-Za-z0-9]/, {
+          message: t("signupScheme.errors.passwordSpecial"),
+        }),
       confirmPassword: z
         .string()
-        .min(8, { message: t("signup.errors.confirmPasswordRequired") }),
+        .min(8, { message: t("signupScheme.errors.confirmPasswordRequired") }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: t("signup.errors.passwordsMismatch"),
+      message: t("signupScheme.errors.passwordsMismatch"),
       path: ["confirmPassword"],
     });
 

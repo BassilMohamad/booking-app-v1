@@ -321,5 +321,20 @@
   "footer": {
     "madeWith": "Made with",
     "by": "by"
+  },
+  "signupScheme": {
+    "errors": {
+      "shopNameMin": "Shop name must be at least 3 characters long.",
+      "shopNameEnglish": "Shop name must only contain English letters, numbers, and spaces.",
+      "salonNameMin": "Salon name must be at least 2 characters long.",
+      "invalidEmail": "Please enter a valid email address.",
+      "passwordMin": "Password must be at least 8 characters long.",
+      "passwordUppercase": "Password must contain at least one uppercase letter.",
+      "passwordLowercase": "Password must contain at least one lowercase letter.",
+      "passwordNumber": "Password must contain at least one number.",
+      "passwordSpecial": "Password must contain at least one special character.",
+      "confirmPasswordRequired": "Please confirm your password.",
+      "passwordsMismatch": "Passwords do not match."
+    }
   }
 }
