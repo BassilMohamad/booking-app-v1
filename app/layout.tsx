@@ -8,34 +8,63 @@ import ClientLayoutWrapper from "@/app/components/ClientLayoutwrapper";
 import ReactQueryProvider from "./QueryClientProvider";
 import GA4Tracker from "@/app/components/GA4Tracker";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
+// Fonts
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 const notoSansArabic = Noto_Sans_Arabic({
   variable: "--font-noto-sans-arabic",
   subsets: ["arabic", "latin"],
   weight: ["500"],
 });
 
+const getUserLang = (): "en" | "ar" => {
+  if (typeof navigator !== "undefined") {
+    return navigator.language.startsWith("ar") ? "ar" : "en";
+  }
+  return "en";
+};
+
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = getUserLang();
+  const isArabic = lang === "ar";
+
   return {
     title: "TarteebPro - Barber Booking",
-    description: "Book your barber appointments with ease",
+    description: isArabic
+      ? "احجز مواعيد الحلاقة بسهولة مع TarteebPro. إدارة الحلاقين والخدمات والمواعيد في صالوناتك المفضل."
+      : "Easily book your barber appointments online with TarteebPro. Manage haircuts, services, and schedules at top salons near you.",
     keywords: ["barber", "booking", "haircut", "salon", "Tarteeb"],
     openGraph: {
       title: "TarteebPro - Barber Booking",
-      description: "Book your barber appointments with ease",
+      description: isArabic
+        ? "احجز مواعيد الحلاقة بسهولة مع TarteebPro."
+        : "Easily book your barber appointments online with TarteebPro.",
       url: "https://tarteebpro.com",
       siteName: "TarteebPro",
-      locale: "en_US",
+      locale: isArabic ? "ar_AR" : "en_US",
       type: "website",
+      images: [
+        {
+          url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+          width: 1200,
+          height: 630,
+          alt: "TarteebPro Barber Booking",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "TarteebPro - Barber Booking",
+      description: isArabic
+        ? "احجز مواعيد الحلاقة بسهولة مع TarteebPro."
+        : "Easily book your barber appointments online with TarteebPro.",
+      images: [
+        "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      ],
+      site: "@TarteebPro",
     },
     robots: {
       index: true,
@@ -46,11 +75,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   const GA_MEASUREMENT_ID = "G-Y1B9EC2T85";
+  const lang = getUserLang();
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -72,7 +104,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${notoSansArabic.variable} antialiased`}>
         <ReactQueryProvider>
           <ClientLayoutWrapper>
-            {/* GA4Tracker handles page view tracking on route changes */}
             <GA4Tracker />
             {children}
           </ClientLayoutWrapper>
