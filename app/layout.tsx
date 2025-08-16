@@ -34,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "TarteebPro - Barber Booking",
     description: isArabic
-      ? "احجز مواعيد الحلاقة بسهولة مع TarteebPro. إدارة الحلاقين والخدمات والمواعيد في صالوناتك المفضل."
-      : "Easily book your barber appointments online with TarteebPro. Manage haircuts, services, and schedules at top salons near you.",
+      ? "أدر الحلاقين والخدمات والمواعيد في صالونك مع TarteebPro، واحجز مواعيد الحلاقة بسهولة."
+      : "Manage barbers, services, and appointments in your salon with TarteebPro. Easily book barber appointments.",
     keywords: ["barber", "booking", "haircut", "salon", "Tarteeb"],
     openGraph: {
       title: "TarteebPro - Barber Booking",
