@@ -276,6 +276,8 @@
     "signUpButton": "Sign Up",
     "signingUp": "Signing up...",
     "signupFailed": "Sign up failed, please try again",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter your salon phone number",
     "errors": {
       "shopNameMin": "Shop name must be at least 3 characters",
       "shopNameEnglish": "Shop name must be in English letters only",
@@ -335,7 +337,10 @@
       "passwordNumber": "Password must contain at least one number.",
       "passwordSpecial": "Password must contain at least one special character.",
       "confirmPasswordRequired": "Please confirm your password.",
-      "passwordsMismatch": "Passwords do not match."
+      "passwordsMismatch": "Passwords do not match.",
+      "phoneMin": "Phone number must be at least 8 digits",
+      "phoneMax": "Phone number cannot exceed 15 digits",
+      "invalidPhone": "Phone number must contain only numbers and may start with +"
     }
   },
   "confirm": {

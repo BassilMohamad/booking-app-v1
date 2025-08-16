@@ -39,6 +39,13 @@ export default function SignUpPage() {
       salonName: z
         .string()
         .min(2, { message: t("signupScheme.errors.salonNameMin") }),
+      phoneNumber: z
+        .string()
+        .min(8, { message: t("signupScheme.errors.phoneMin") })
+        .max(15, { message: t("signupScheme.errors.phoneMax") })
+        .regex(/^\+?[0-9]{8,15}$/, {
+          message: t("signupScheme.errors.invalidPhone"),
+        }),
       email: z
         .string()
         .email({ message: t("signupScheme.errors.invalidEmail") }),
@@ -79,6 +86,7 @@ export default function SignUpPage() {
         password: data.password,
         shopName: data.shopName,
         salonName: data.salonName,
+        phoneNumber: data.phoneNumber,
       },
       {
         onSuccess: () => router.push(`/barber/${slug}/dashboard`),
@@ -144,6 +152,19 @@ export default function SignUpPage() {
               {errors.shopName && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.shopName.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label>{t("signup.phoneNumber")}</Label>
+              <Input
+                type="tel"
+                placeholder={t("signup.phoneNumberPlaceholder")}
+                {...register("phoneNumber")}
+              />
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.phoneNumber.message}
                 </p>
               )}
             </div>

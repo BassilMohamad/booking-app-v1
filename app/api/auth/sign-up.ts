@@ -8,6 +8,7 @@ interface SignUpData {
   password: string;
   shopName: string;
   salonName: string;
+  phoneNumber: string;
 }
 
 interface SignUpResponse {
@@ -19,7 +20,13 @@ export const useSignUpWithOwner = () => {
   const queryClient = useQueryClient();
 
   return useMutation<SignUpResponse, Error, SignUpData>({
-    mutationFn: async ({ email, password, shopName, salonName }) => {
+    mutationFn: async ({
+      email,
+      password,
+      shopName,
+      salonName,
+      phoneNumber,
+    }) => {
       if (!shopName || !email || !password) {
         throw new Error("All fields are required.");
       }
@@ -48,6 +55,7 @@ export const useSignUpWithOwner = () => {
         email,
         bookings: [],
         salonNmae: salonName,
+        phoneNumber: phoneNumber,
       });
 
       return { uid: user.uid, shopId: slug };
