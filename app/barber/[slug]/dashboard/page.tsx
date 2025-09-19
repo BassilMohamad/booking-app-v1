@@ -74,7 +74,7 @@ import {
   useDeleteService,
   useUpdateService,
 } from "@/app/api/useServesesHandling";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useDeleteBooking } from "@/app/api/useDeleteBooking";
 import { db } from "@/lib/firebase";
 
@@ -290,7 +290,7 @@ export default function OwnerDashboard() {
   const handleAddService = () => {
     if (newService.name && newService.price && newService.duration) {
       const service: Service = {
-        id: generatServiceId,
+        id: doc(collection(db, `shops/${shopSlug}/services`)).id,
         name: newService.name,
         duration: newService.duration,
         price: newService.price,
@@ -882,10 +882,12 @@ export default function OwnerDashboard() {
                     <TableCell
                       className={locale === "ar" ? "text-right" : "text-left"}>
                       {booking.service
-                        .map(
-                          (serviceId) =>
-                            data?.services.find((s) => s.id === serviceId)?.name
-                        )
+                        .map((serviceId) => {
+                          const service = services.find(
+                            (s) => s.id === serviceId
+                          );
+                          return service ? service.name : null;
+                        })
                         .filter(Boolean)
                         .join(", ")}
                     </TableCell>
