@@ -289,8 +289,9 @@ export default function OwnerDashboard() {
 
   const handleAddService = () => {
     if (newService.name && newService.price && newService.duration) {
+      const newServiceId = doc(collection(db, "services")).id;
       const service: Service = {
-        id: doc(collection(db, `shops/${shopSlug}/services`)).id,
+        id: newServiceId,
         name: newService.name,
         duration: newService.duration,
         price: newService.price,
@@ -298,16 +299,11 @@ export default function OwnerDashboard() {
       };
       setServices([...services, service]);
       setIsAddServiceOpen(false);
+      setNewService({});
       addServices(
+        { shopSlug, service },
         {
-          shopSlug,
-          service,
-        },
-        {
-          onSuccess: () => {
-            toast.success(t("toast.serviceAdded"));
-            setNewService({});
-          },
+          onSuccess: () => toast.success(t("toast.serviceAdded")),
           onError: (e) => {
             console.error("Add service error:", e);
             toast.error(t("toast.serviceAddFailed"));
