@@ -525,10 +525,9 @@ export default function OwnerDashboard() {
                             currentBarber?.workingHours?.[day]?.start || "09:00"
                           }
                           min="00:00"
-                          max="11:59"
+                          max="12:00"
                           onChange={(e) => {
                             const newValue = e.target.value;
-                            if (newValue >= "12:00") return;
                             setCurrentBarber((prev) => ({
                               ...prev,
                               workingHours: {
@@ -557,7 +556,7 @@ export default function OwnerDashboard() {
                           max="23:59"
                           onChange={(e) => {
                             const newValue = e.target.value;
-                            if (newValue < "12:00") return;
+                            if (newValue <= "12:00") return;
                             setCurrentBarber((prev) => ({
                               ...prev,
                               workingHours: {
